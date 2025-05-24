@@ -1,0 +1,66 @@
+###> Symfony Framework ###
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< Symfony Framework ###
+
+###> PHPUnit ###
+/phpunit.xml
+.phpunit.result.cache
+###< PHPUnit ###
+
+###> Symfony Asset Mapper ###
+/public/assets/
+/assets/vendor/
+###< Symfony Asset Mapper ###
+
+###> Composer ###
+/composer.lock
+/vendor/
+###< Composer ###
+
+###> Logs & Cache ###
+/var/log/
+/var/cache/
+*.log
+###< Logs & Cache ###
+
+###> Docker ###
+.docker/
+docker-compose.override.yml
+docker-compose.local.yml
+###< Docker ###
+
+###> IDEs & Editors ###
+.idea/
+/*.iml
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+###< IDEs & Editors ###
+
+###> OS Files ###
+.DS_Store
+Thumbs.db
+desktop.ini
+###< OS Files ###
+
+###> Node ###
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+###< Node ###
+
+###> Misc ###
+*.bak
+*.tmp
+*.temp
+###< Misc ###
