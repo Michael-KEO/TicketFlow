@@ -1,17 +1,84 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TicketFlow{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f2fe;
+            color: #222;
+        }
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
+        header {
+            background-color: #0d47a1;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .user-info {
+            font-size: 0.9rem;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #1565c0;
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ path('homepage') }}">Accueil</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('user_index') }}">Gérer les utilisateurs</a>
+            {% endif %}
+        </nav>
+        <div class="user-info">
+            {% if app.user %}
+                <span>Connecté en tant que <strong>{{ app.user.email }}</strong></span>
+                <a href="{{ path('app_logout') }}" class="btn">Se déconnecter</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn">Se connecter</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main>
         {% block body %}{% endblock %}
-    </body>
+    </main>
+</body>
 </html>

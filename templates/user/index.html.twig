@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+<style>
+    .user-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 2rem;
+        background-color: #ffffffdd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        color: #0d47a1;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+    }
+
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+    }
+
+    tr {
+        background-color: white; /* ✅ fond blanc par défaut */
+    }
+
+    tr:hover {
+        background-color: #f1f9ff;
+    }
+
+    th {
+        background-color: #e3f2fd;
+        font-weight: bold;
+        color: #0d47a1;
+    }
+
+    .btn-action {
+        margin-right: 0.8rem; /* ✅ espacement plus large */
+        text-decoration: none;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .btn-show {
+        background-color: #64b5f6;
+        color: white;
+    }
+
+    .btn-edit {
+        background-color: #81c784;
+        color: white;
+    }
+
+    .verified {
+        font-weight: bold;
+        color: #388e3c;
+    }
+
+    .not-verified {
+        font-weight: bold;
+        color: #e53935;
+    }
+
+    .add-user {
+        display: inline-block;
+        margin-top: 1rem;
+        text-decoration: none;
+        background-color: #0d47a1;
+        color: white;
+        padding: 0.6rem 1rem;
+        border-radius: 5px;
+    }
+
+    .add-user:hover {
+        background-color: #08306b;
+    }
+</style>
+
+<div class="user-container">
+    <h1>Liste des utilisateurs</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Rôles</th>
+                <th>Mot de passe</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Vérifié</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles ? user.roles|join(', ') : '' }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.nom }}</td>
+                <td>
+                    {% if user.isVerified %}
+                        <span class="verified">✔️</span>
+                    {% else %}
+                        <span class="not-verified">❌</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('user_show', {'id': user.id}) }}" class="btn-action btn-show">Afficher</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn-action btn-edit">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun utilisateur trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user_new') }}" class="add-user">+ Créer un utilisateur</a>
+</div>
+{% endblock %}
