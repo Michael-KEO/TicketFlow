@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 #[IsGranted('ROLE_ADMIN')]
 #[Route(path: '/user', name: 'user_')] 
@@ -24,25 +26,38 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserForm::class, $user);
-        $form->handleRequest($request);
+#[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+public function new(
+    Request $request,
+    EntityManagerInterface $entityManager,
+    UserPasswordHasherInterface $passwordHasher
+): Response {
+    $user = new User();
+    $form = $this->createForm(UserForm::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Hasher le mot de passe
+        $plainPassword = $form->get('plainPassword')->getData();
+        $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+        $user->setPassword($hashedPassword);
 
-            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
-        }
+        // Appliquer le rôle sélectionné (dans un tableau)
+        $selectedRole = $form->get('roles')->getData();
+        $user->setRoles([$selectedRole]);
 
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('user/new.html.twig', [
+        'user' => $user,
+        'form' => $form,
+    ]);
+}
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(User $user): Response

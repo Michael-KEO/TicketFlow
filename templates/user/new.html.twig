@@ -1,11 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Créer un nouvel utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffffdd;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    {{ include('user/_form.html.twig') }}
+        .form-container h1 {
+            font-size: 1.8rem;
+            color: #0d47a1;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #0d47a1;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="form-container">
+        <h1>Créer un nouvel utilisateur</h1>
+        {{ include('user/_form.html.twig') }}
+        <a href="{{ path('user_index') }}" class="back-link">← Retour à la liste</a>
+    </div>
 {% endblock %}

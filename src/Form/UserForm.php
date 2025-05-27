@@ -6,17 +6,23 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class UserForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('password')
+            ->add('email')  
             ->add('prenom')
             ->add('nom')
-            ->add('isVerified')
+            ->add('plainPassword', PasswordType::class, [
+    'mapped' => false,
+    'required' => true,
+    'attr' => ['autocomplete' => 'new-password'],
+])
             ->add('roles' , ChoiceType::class, [
         'choices' => [
             'Administrateur' => 'ROLE_ADMIN',
