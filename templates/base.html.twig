@@ -4,166 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TicketFlow{% endblock %}</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    {# Favicon (vous pouvez garder le vôtre ou le personnaliser) #}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>TF</text></svg>">
 
-        body {
-            margin: 0;
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(120deg, #e0e7ff 0%, #f0f9ff 100%);
-            color: #222;
-            min-height: 100vh;
-        }
+    {# Lien vers votre fichier CSS principal qui contiendra les styles #}
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {# Si vous créez un fichier dédié theme.css ou glpi_inspired.css #}
+    {# <link rel="stylesheet" href="{{ asset('styles/theme.css') }}"> #}
 
-        header {
-            background: #1e293b;
-            color: #fff;
-            padding: 1.2rem 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 12px 0 rgba(30,41,59,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #60a5fa;
-            text-shadow: 0 2px 8px rgba(96,165,250,0.15);
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.08rem;
-            position: relative;
-            transition: color 0.2s;
-        }
-
-        nav a::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 2px;
-            background: #60a5fa;
-            transition: width .3s;
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-        }
-
-        nav a:hover {
-            color: #60a5fa;
-        }
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .user-info {
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 80vh;
-            padding: 2.5rem 1rem;
-            background: none;
-        }
-
-        .container-main {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 32px 0 rgba(30,41,59,0.10);
-            padding: 2.5rem 2rem;
-            width: 100%;
-            max-width: 900px;
-            margin: 2rem 0;
-            animation: fadeIn 0.7s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-
-        .btn {
-            padding: 0.6rem 1.3rem;
-            background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 2px 8px 0 rgba(96,165,250,0.10);
-            transition: background 0.2s, transform 0.1s;
-            text-decoration: none;
-            outline: none;
-        }
-        .btn:hover, .btn:focus {
-            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
-            transform: translateY(-2px) scale(1.04);
-        }
-
-        @media (max-width: 700px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 1rem 1.2rem;
-            }
-            nav {
-                gap: 1rem;
-            }
-            main {
-                padding: 1rem 0.2rem;
-            }
-            .container-main {
-                padding: 1.2rem 0.5rem;
-            }
-        }
-    </style>
     {% block stylesheets %}{% endblock %}
+
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{{ path('homepage') }}">Accueil</a>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('user_index') }}">Gérer les utilisateurs</a>
-            {% endif %}
-        </nav>
-        <div class="user-info">
-            {% if app.user %}
-                <span>Connecté en tant que <strong>{{ app.user.email }}</strong></span>
-                <a href="{{ path('app_logout') }}" class="btn">Se déconnecter</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="btn">Se connecter</a>
-            {% endif %}
-        </div>
-    </header>
+    <div class="app-container"> {# Conteneur global pour layout flex si sidebar #}
+        <header class="app-header">
+            <div class="logo">
+                <a href="{{ path('homepage') }}">TicketFlow</a>
+            </div>
+            <nav class="main-navigation">
+                <a href="{{ path('homepage') }}">Accueil</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('user_index') }}">Gérer les utilisateurs</a>
+                {% endif %}
+                {# Ajoutez d'autres liens de navigation principaux ici #}
+            </nav>
+            <div class="user-info">
+                {% if app.user %}
+                    <span>Connecté : <strong>{{ app.user.email }}</strong></span>
+                    <a href="{{ path('app_logout') }}" class="btn btn-logout">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-login">Connexion</a>
+                {% endif %}
+            </div>
+        </header>
 
-    <main>
-        <div class="container-main">
-            {% block body %}{% endblock %}
-        </div>
-    </main>
+        {# Optionnel: Si vous voulez un layout avec sidebar comme GLPi #}
+        {# <div class="app-body"> #}
+            {# <aside class="app-sidebar"> #}
+                {# {% block sidebar_nav %} #}
+                    {# La navigation principale pourrait être ici si vous la déplacez #}
+                {# {% endblock %} #}
+            {# </aside> #}
+
+            <main class="app-main-content">
+                 {% for label, messages in app.flashes %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="content-wrapper"> {# Remplace .container-main pour la sémantique #}
+                    {% block body %}{% endblock %}
+                </div>
+            </main>
+        {# </div> .app-body #}
+
+        {% block footer %}
+            <footer class="app-footer">
+                <p>&copy; {{ "now"|date("Y") }} TicketFlow. Tous droits réservés.</p>
+            </footer>
+        {% endblock %}
+    </div>
 </body>
 </html>
