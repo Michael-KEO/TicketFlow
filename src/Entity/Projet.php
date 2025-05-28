@@ -8,7 +8,6 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Client;
-use App\Entity\Ticket;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
 #[Broadcast]
@@ -50,14 +49,10 @@ class Projet
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    // Liste des tickets associés à ce projet
-    #[ORM\OneToMany(mappedBy: "projet", targetEntity: Ticket::class)]
-    private Collection $tickets;
-
     // Constructeur : initialise la collection de tickets
     public function __construct()
     {
-        $this->tickets = new ArrayCollection();
+        // $this->tickets = new ArrayCollection();
     }
 
     // Retourne l'identifiant technique du projet
@@ -155,11 +150,5 @@ class Projet
     {
         $this->client = $client;
         return $this;
-    }
-
-    // Retourne la collection des tickets associés à ce projet
-    public function getTickets(): Collection
-    {
-        return $this->tickets;
     }
 }
