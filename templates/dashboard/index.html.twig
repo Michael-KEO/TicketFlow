@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord - TicketFlow{% endblock %}
+
+{% block body %}
+<div class="container-fluid mt-4">
+    <h1 class="mb-4">Tableau de Bord</h1>
+
+    {# Section des Compteurs Clés #}
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Mes Tickets Actifs</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ mesTicketsEnCours }}</h4>
+                    <p class="card-text">Tickets qui vous sont assignés et en cours de traitement.</p>
+                </div>
+            </div>
+        </div>
+        {# Ajoutez d'autres compteurs ici si nécessaire #}
+    </div>
+
+    {# Section des Graphiques #}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Tickets par Statut
+                </div>
+                <div class="card-body">
+                    {# Le canvas pour Chart.js sera ajouté ici #}
+                    <canvas id="ticketsParStatutChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Tickets par Priorité
+                </div>
+                <div class="card-body">
+                    {# Le canvas pour Chart.js sera ajouté ici #}
+                    <canvas id="ticketsParPrioriteChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Informations brutes pour le débogage des données des graphiques (peut être supprimé plus tard) #}
+    {#
+    <h2>Données pour les graphiques (débogage)</h2>
+    <h3>Tickets par Statut:</h3>
+    <pre>{{ dump(ticketsParStatut) }}</pre>
+
+    <h3>Tickets par Priorité:</h3>
+    <pre>{{ dump(ticketsParPriorite) }}</pre>
+    #}
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Importation de Chart.js via importmap (assurez-vous qu'il est configuré dans importmap.php) #}
+    {# Si Chart.js n'est pas dans importmap.php, vous devrez l'ajouter : #}
+    {# php bin/console importmap:require chart.js #}
+    <script type="module">
+        import Chart from 'chart.js/auto'; // Ou le chemin d'importation correct depuis votre importmap
+
+        // Données pour le graphique "Tickets par Statut"
+        const statutData = {{ ticketsParStatut|json_encode|raw }};
+        const statutLabels = Object.keys(statutData);
+        const statutCounts = Object.values(statutData);
+
+        new Chart(document.getElementById('ticketsParStatutChart'), {
+            type: 'doughnut', // ou 'pie', 'bar'
+            data: {
+                labels: statutLabels,
+                datasets: [{
+                    label: 'Tickets par Statut',
+                    data: statutCounts,
+                    backgroundColor: [ // Ajoutez autant de couleurs que de statuts potentiels
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Données pour le graphique "Tickets par Priorité"
+        const prioriteData = {{ ticketsParPriorite|json_encode|raw }};
+        const prioriteLabels = Object.keys(prioriteData);
+        const prioriteCounts = Object.values(prioriteData);
+
+        new Chart(document.getElementById('ticketsParPrioriteChart'), {
+            type: 'bar', // ou 'pie'
+            data: {
+                labels: prioriteLabels,
+                datasets: [{
+                    label: 'Tickets par Priorité',
+                    data: prioriteCounts,
+                    backgroundColor: [ // Ajoutez autant de couleurs que de priorités potentielles
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Peut être redondant pour un bar chart simple
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

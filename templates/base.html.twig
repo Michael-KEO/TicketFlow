@@ -5,53 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TicketFlow{% endblock %}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e0f2fe;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, #e0e7ff 0%, #f0f9ff 100%);
             color: #222;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #0d47a1;
-            color: white;
-            padding: 1rem 2rem;
+            background: #1e293b;
+            color: #fff;
+            padding: 1.2rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 12px 0 rgba(30,41,59,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #60a5fa;
+            text-shadow: 0 2px 8px rgba(96,165,250,0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
         }
 
         nav a {
-            color: white;
-            margin-right: 20px;
+            color: #fff;
             text-decoration: none;
             font-weight: 500;
+            font-size: 1.08rem;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        nav a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #60a5fa;
+            transition: width .3s;
+            position: absolute;
+            bottom: -4px;
+            left: 0;
         }
 
         nav a:hover {
-            text-decoration: underline;
+            color: #60a5fa;
+        }
+        nav a:hover::after {
+            width: 100%;
         }
 
         .user-info {
-            font-size: 0.9rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         main {
-            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 80vh;
+            padding: 2.5rem 1rem;
+            background: none;
+        }
+
+        .container-main {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 rgba(30,41,59,0.10);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem 0;
+            animation: fadeIn 0.7s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
         }
 
         .btn {
-            padding: 0.5rem 1rem;
-            background-color: #1976d2;
-            color: white;
+            padding: 0.6rem 1.3rem;
+            background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+            color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px 0 rgba(96,165,250,0.10);
+            transition: background 0.2s, transform 0.1s;
             text-decoration: none;
-            font-weight: bold;
+            outline: none;
+        }
+        .btn:hover, .btn:focus {
+            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+            transform: translateY(-2px) scale(1.04);
         }
 
-        .btn:hover {
-            background-color: #1565c0;
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem 1.2rem;
+            }
+            nav {
+                gap: 1rem;
+            }
+            main {
+                padding: 1rem 0.2rem;
+            }
+            .container-main {
+                padding: 1.2rem 0.5rem;
+            }
         }
     </style>
     {% block stylesheets %}{% endblock %}
@@ -78,7 +161,9 @@
     </header>
 
     <main>
-        {% block body %}{% endblock %}
+        <div class="container-main">
+            {% block body %}{% endblock %}
+        </div>
     </main>
 </body>
 </html>
