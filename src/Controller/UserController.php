@@ -43,8 +43,8 @@ public function new(
         $user->setPassword($hashedPassword);
 
         // Appliquer le rôle sélectionné (dans un tableau)
-        $selectedRole = $form->get('roles')->getData();
-        $user->setRoles([$selectedRole]);
+        $selectedRoles = $form->get('roles')->getData();
+        $user->setRoles($selectedRoles);
 
         $entityManager->persist($user);
         $entityManager->flush();
