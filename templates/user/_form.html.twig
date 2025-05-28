@@ -1,4 +1,50 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {% if form.email.vars.errors|length > 0 %}
+        <span style="color: #e53935; margin-left: 1em;">
+            {{ form_errors(form.email) }}
+        </span>
+    {% endif %}
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {{ form_label(form.prenom) }}
+    {{ form_widget(form.prenom) }}
+    {% if form.prenom.vars.errors|length > 0 %}
+        <span style="color: #e53935; margin-left: 1em;">
+            {{ form_errors(form.prenom) }}
+        </span>
+    {% endif %}
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom) }}
+    {% if form.nom.vars.errors|length > 0 %}
+        <span style="color: #e53935; margin-left: 1em;">
+            {{ form_errors(form.nom) }}
+        </span>
+    {% endif %}
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {{ form_label(form.plainPassword) }}
+    {{ form_widget(form.plainPassword) }}
+    {% if form.plainPassword.vars.errors|length > 0 %}
+        <span style="color: #e53935; margin-left: 1em;">
+            {{ form_errors(form.plainPassword) }}
+        </span>
+    {% endif %}
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {{ form_label(form.roles) }}
+    {{ form_widget(form.roles) }}
+    {% if form.roles.vars.errors|length > 0 %}
+        <span style="color: #e53935; margin-left: 1em;">
+            {{ form_errors(form.roles) }}
+        </span>
+    {% endif %}
+</div>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
