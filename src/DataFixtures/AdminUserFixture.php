@@ -19,12 +19,12 @@ class AdminUserFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         $admin = new User();
-        $admin->setEmail('admin@ticketflow.com');
+        $admin->setEmail('admin@example.com');
         $admin->setPrenom('Super');
         $admin->setNom('Admin');
         $admin->setRoles(['ROLE_ADMIN']);
 
-        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'adminpass');
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'admin');
         $admin->setPassword($hashedPassword);
 
         $manager->persist($admin);

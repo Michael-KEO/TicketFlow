@@ -54,6 +54,10 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
         return new RedirectResponse($this->urlGenerator->generate('developer_dashboard'));
     }
 
+    if (in_array('ROLE_REPORTER', $roles)) {
+        return new RedirectResponse($this->urlGenerator->generate('reporter_dashboard'));
+    }
+
     return new RedirectResponse($this->urlGenerator->generate('app_home'));
 }
 
