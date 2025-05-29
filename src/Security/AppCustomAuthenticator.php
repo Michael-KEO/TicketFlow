@@ -42,25 +42,27 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-{
-    $roles = $token->getRoleNames();
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        $roles = $token->getRoleNames();
 
-    if (in_array('ROLE_ADMIN', $roles)) {
-        return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
+        if (count($roles) === 1) {
+            return new RedirectResponse($this->urlGenerator->generate($this->getDashboardRoute($roles[0])));
+        }
+
+        // S'il y a plusieurs rôles, rediriger vers la page de choix
+        return new RedirectResponse($this->urlGenerator->generate('choose_role'));
     }
 
-    if (in_array('ROLE_DEVELOPER', $roles)) {
-        return new RedirectResponse($this->urlGenerator->generate('developer_dashboard'));
+    private function getDashboardRoute(string $role): string
+    {
+        return match ($role) {
+            'ROLE_ADMIN' => 'admin_dashboard',
+            'ROLE_DEV' => 'developer_dashboard',
+            'ROLE_RAPPORTEUR' => 'reporter_dashboard',
+            default => 'app_home',
+        };
     }
-
-    if (in_array('ROLE_REPORTER', $roles)) {
-        return new RedirectResponse($this->urlGenerator->generate('reporter_dashboard'));
-    }
-
-    return new RedirectResponse($this->urlGenerator->generate('app_home'));
-}
-
 
     protected function getLoginUrl(Request $request): string
     {
