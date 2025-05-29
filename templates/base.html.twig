@@ -41,9 +41,12 @@
                         {% endif %}
                     </span>
                     {# Bouton Changer de rôle - MODIFIÉ ICI #}
-                    {% if app.session.get('active_role') %}
-                        <a href="{{ path('choose_role', {'change': 1}) }}" class="btn btn-secondary">Changer de rôle</a>
-                    {% endif %}
+{% set user_roles = app.user ? app.user.roles|filter(r => r != 'ROLE_USER') : [] %}
+
+{% if user_roles|length > 1 %}
+    <a href="{{ path('choose_role', {'change': 1}) }}" class="btn btn-secondary">Changer de rôle</a>
+{% endif %}
+
                     <a href="{{ path('app_logout') }}" class="btn btn-logout">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn-login">Connexion</a>
