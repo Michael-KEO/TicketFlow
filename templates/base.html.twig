@@ -24,13 +24,16 @@
                 <a href="{{ path('homepage') }}">Accueil</a>
 
                 {% if activeRole == 'ROLE_ADMIN' %}
-                    <a href="{{ path('user_index') }}">Gérer les utilisateurs</a>
-                    <a href="{{ path('client_index') }}">Gérer les clients</a>
-                    <a href="{{ path('app_projet_index') }}">Gérer les projets</a>
+                    <a href="{{ path('user_index') }}">👥 Utilisateurs</a>
+                    <a href="{{ path('ticket_index') }}">🎫 Tous les tickets</a>
+                    <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
                 {% elseif activeRole == 'ROLE_RAPPORTEUR' %}
-                    <a href="#">Tickets à traiter</a>
+                    <a href="{{ path('ticket_new') }}">➕ Nouveau ticket</a>
+                    <a href="{{ path('ticket_index') }}">📋 Mes tickets</a>
+                    <a href="{{ path('reporter_dashboard') }}">📊 Tableau de bord</a>
                 {% elseif activeRole == 'ROLE_DEV' %}
-                    <a href="#">Tickets assignés</a>
+                    <a href="{{ path('ticket_index') }}">🛠️ Tickets assignés</a>
+                    <a href="{{ path('developer_dashboard') }}">📊 Tableau de bord</a>
                 {% endif %}
             </nav>
 
@@ -39,7 +42,9 @@
                     <span>
                         Connecté : <strong>{{ app.user.email }}</strong>
                         {% if activeRole %}
-                            <span class="badge bg-info text-dark ms-2">Rôle : {{ activeRole|replace({'ROLE_': ''})|lower|capitalize }}</span>
+                            <span class="badge bg-info text-dark ms-2">
+                                Rôle : {{ activeRole|replace({'ROLE_': ''})|lower|capitalize }}
+                            </span>
                         {% endif %}
                     </span>
                     {# Bouton Changer de rôle - MODIFIÉ ICI #}

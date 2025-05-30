@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau ticket{% endblock %}
+
+{% block body %}
+<style>
+    .ticket-form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .form-header h1 {
+        color: #0d47a1;
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .form-header p {
+        color: #666;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.2s;
+        background-color: #fafafa;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #0d47a1;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+    }
+
+    .form-control[readonly] {
+        background-color: #f5f5f5;
+        color: #666;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-help {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.25rem;
+        font-style: italic;
+    }
+
+    .required {
+        color: #c62828;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+        padding: 0.75rem 2rem;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0d47a1, #1976d2);
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #666;
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        color: white;
+    }
+
+    .form-errors {
+        background-color: #ffebee;
+        border: 1px solid #ef5350;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        color: #c62828;
+    }
+
+    .form-errors h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1rem;
+    }
+
+    .form-errors ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .checkbox-group label {
+        display: flex;
+        align-items: center;
+        font-weight: normal;
+        cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 0.5rem;
+        width: auto;
+    }
+
+    @media (max-width: 768px) {
+        .ticket-form-container {
+            margin: 1rem;
+            padding: 1rem;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="ticket-form-container">
+    <div class="form-header">
+        <h1>🎫 Créer un nouveau ticket</h1>
+        <p>Décrivez votre problème ou demande de façon détaillée</p>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        
+        {% if not form.vars.valid %}
+            <div class="form-errors">
+                <h4>⚠️ Veuillez corriger les erreurs suivantes :</h4>
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form_label(form.titreTicket) }} <span class="required">*</span>
+            {{ form_widget(form.titreTicket, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Erreur 404 sur la page de connexion'}}) }}
+            {{ form_errors(form.titreTicket) }}
+            <div class="form-help">Résumez le problème en quelques mots</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_label(form.typeTicket) }}
+                {{ form_widget(form.typeTicket, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.typeTicket) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.prioriteTicket) }}
+                {{ form_widget(form.prioriteTicket, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.prioriteTicket) }}
+            </div>
+        </div>
+
+        {% if form.projet is defined %}
+            <div class="form-group">
+                {{ form_label(form.projet) }} <span class="required">*</span>
+                {{ form_widget(form.projet, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.projet) }}
+                <div class="form-help">Sélectionnez le projet concerné par ce ticket</div>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form_label(form.descriptionTicket) }} <span class="required">*</span>
+            {{ form_widget(form.descriptionTicket, {'attr': {'class': 'form-control', 'rows': 8, 'placeholder': 'Décrivez le problème en détail :\n- Que faisiez-vous quand le problème est survenu ?\n- Quel était le résultat attendu ?\n- Que s\'est-il passé à la place ?\n- Comment reproduire le problème ?'}}) }}
+            {{ form_errors(form.descriptionTicket) }}
+            <div class="form-help">Plus vous donnez d'informations, plus il sera facile de résoudre le problème</div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.dateEcheance) }}
+            {{ form_widget(form.dateEcheance, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.dateEcheance) }}
+            <div class="form-help">Date limite souhaitée pour la résolution (optionnel)</div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                ✅ Créer le ticket
+            </button>
+            <a href="{{ path('ticket_index') }}" class="btn btn-secondary">
+                ❌ Annuler
+            </a>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+
+<script>
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function(textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+});
+</script>
+{% endblock %}

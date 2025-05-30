@@ -3,15 +3,339 @@
 {% block title %}Tableau de bord - Rapporteur{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">Bienvenue Rapporteur 📝</h1>
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
 
-    <div class="card">
-        <div class="card-body">
-            <p>Vous pouvez ici enregistrer de nouveaux tickets et suivre leur évolution.</p>
-            <a href="#" class="btn btn-success">Créer un ticket</a>
-            <a href="#" class="btn btn-primary">Voir mes tickets</a>
+    .welcome-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, #0d47a1, #1976d2);
+        color: white;
+        border-radius: 8px;
+    }
+
+    .welcome-header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 600;
+    }
+
+    .welcome-header p {
+        margin: 0.5rem 0 0 0;
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #666;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .stat-total { color: #0d47a1; }
+    .stat-nouveau { color: #f57c00; }
+    .stat-en-cours { color: #7b1fa2; }
+    .stat-resolu { color: #2e7d32; }
+    .stat-ferme { color: #616161; }
+
+    .actions-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .actions-section h2 {
+        color: #0d47a1;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0d47a1, #1976d2);
+        color: white;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #2e7d32, #4caf50);
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        color: white;
+    }
+
+    .recent-tickets {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .recent-tickets h2 {
+        color: white;
+        background: #0d47a1;
+        margin: 0;
+        padding: 1.5rem 2rem;
+        font-size: 1.8rem;
+    }
+
+    .tickets-list {
+        padding: 0;
+    }
+
+    .ticket-item {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+
+    .ticket-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .ticket-item:last-child {
+        border-bottom: none;
+    }
+
+    .ticket-info h3 {
+        margin: 0 0 0.5rem 0;
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .ticket-meta {
+        color: #666;
+        font-size: 0.9rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .status-nouveau { background-color: #fff3e0; color: #f57c00; }
+    .status-ouvert { background-color: #e3f2fd; color: #0d47a1; }
+    .status-en-cours { background-color: #f3e5f5; color: #7b1fa2; }
+    .status-resolu { background-color: #e8f5e8; color: #2e7d32; }
+    .status-ferme { background-color: #f5f5f5; color: #616161; }
+
+    .ticket-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-small {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-view {
+        background-color: #64b5f6;
+        color: white;
+    }
+
+    .btn-edit {
+        background-color: #81c784;
+        color: white;
+    }
+
+    .btn-small:hover {
+        transform: translateY(-1px);
+        color: white;
+    }
+
+    .no-tickets {
+        padding: 3rem 2rem;
+        text-align: center;
+        color: #666;
+    }
+
+    .no-tickets h3 {
+        color: #0d47a1;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            margin: 1rem;
+            padding: 1rem;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .ticket-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .ticket-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="welcome-header">
+        <h1>📝 Tableau de bord Rapporteur</h1>
+        <p>Bienvenue {{ app.user.prenom }} ! Gérez vos tickets et demandes.</p>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number stat-total">{{ statistiques.total }}</div>
+            <div class="stat-label">Total tickets</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-number stat-nouveau">{{ statistiques.nouveau }}</div>
+            <div class="stat-label">Nouveaux</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number stat-en-cours">{{ statistiques.en_cours }}</div>
+            <div class="stat-label">En cours</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number stat-resolu">{{ statistiques.resolu }}</div>
+            <div class="stat-label">Résolus</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number stat-ferme">{{ statistiques.ferme }}</div>
+            <div class="stat-label">Fermés</div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="actions-section">
+        <h2>🚀 Actions rapides</h2>
+        <div class="action-buttons">
+            <a href="{{ path('ticket_new') }}" class="btn btn-success">
+                ➕ Créer un nouveau ticket
+            </a>
+            <a href="{{ path('ticket_index') }}" class="btn btn-primary">
+                📋 Voir tous mes tickets
+            </a>
+        </div>
+    </div>
+
+    <!-- Tickets récents -->
+    <div class="recent-tickets">
+        <h2>🕒 Mes derniers tickets</h2>
+        
+        {% if mesTickets|length > 0 %}
+            <div class="tickets-list">
+                {% for ticket in mesTickets %}
+                    <div class="ticket-item">
+                        <div class="ticket-info">
+                            <h3>#{{ ticket.ticketId }} - {{ ticket.titreTicket }}</h3>
+                            <div class="ticket-meta">
+                                <span>📅 {{ ticket.dateCreation|date('d/m/Y') }}</span>
+                                <span>🏷️ {{ ticket.typeTicket ?? 'Non défini' }}</span>
+                                <span class="status-badge status-{{ ticket.statutTicket|lower|replace({' ': '-'}) }}">
+                                    {{ ticket.statutTicket ?? 'Nouveau' }}
+                                </span>
+                                {% if ticket.projet %}
+                                    <span>📁 {{ ticket.projet.nomProjet }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="ticket-actions">
+                            <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn-small btn-view">
+                                👁️ Voir
+                            </a>
+                            <a href="{{ path('ticket_edit', {'id': ticket.id}) }}" class="btn-small btn-edit">
+                                ✏️ Modifier
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-tickets">
+                <h3>🎫 Aucun ticket trouvé</h3>
+                <p>Vous n'avez pas encore créé de tickets.</p>
+                <a href="{{ path('ticket_new') }}" class="btn btn-success">
+                    ➕ Créer votre premier ticket
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
