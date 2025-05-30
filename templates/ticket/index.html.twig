@@ -1,0 +1,291 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if activeRole == 'ROLE_RAPPORTEUR' %}
+        Mes tickets créés
+    {% elseif activeRole == 'ROLE_DEV' %}
+        Mes tickets assignés
+    {% else %}
+        Tous les tickets
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<style>
+    .tickets-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .tickets-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .tickets-header h1 {
+        color: #0d47a1;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .btn-new-ticket {
+        background-color: #0d47a1;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .btn-new-ticket:hover {
+        background-color: #08306b;
+        color: white;
+    }
+
+    .tickets-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .tickets-table th,
+    .tickets-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .tickets-table th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        color: #424242;
+    }
+
+    .tickets-table tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .ticket-id {
+        font-weight: 600;
+        color: #0d47a1;
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .status-nouveau { background-color: #e3f2fd; color: #0d47a1; }
+    .status-ouvert { background-color: #fff3e0; color: #f57c00; }
+    .status-en-cours { background-color: #f3e5f5; color: #7b1fa2; }
+    .status-resolu { background-color: #e8f5e8; color: #2e7d32; }
+    .status-ferme { background-color: #f5f5f5; color: #616161; }
+    .status-rejete { background-color: #ffebee; color: #c62828; }
+    .status-assigne { background-color: #e1f5fe; color: #0277bd; }
+
+    .priority-badge {
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .priority-basse { background-color: #e8f5e8; color: #2e7d32; }
+    .priority-normale { background-color: #fff3e0; color: #f57c00; }
+    .priority-haute { background-color: #fff3e0; color: #ff6f00; }
+    .priority-critique { background-color: #ffebee; color: #c62828; }
+
+    .ticket-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-action {
+        padding: 0.4rem 0.8rem;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-view {
+        background-color: #64b5f6;
+        color: white;
+    }
+
+    .btn-edit {
+        background-color: #81c784;
+        color: white;
+    }
+
+    .btn-view:hover, .btn-edit:hover {
+        transform: translateY(-1px);
+        color: white;
+    }
+
+    .no-tickets {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+    }
+
+    .ticket-meta {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .tickets-table {
+            font-size: 0.85rem;
+        }
+        
+        .tickets-table th,
+        .tickets-table td {
+            padding: 0.5rem;
+        }
+        
+        .tickets-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="tickets-container">
+    <div class="tickets-header">
+        <h1>
+            {% if activeRole == 'ROLE_RAPPORTEUR' %}
+                📝 Mes tickets créés ({{ tickets|length }})
+            {% elseif activeRole == 'ROLE_DEV' %}
+                👨‍💻 Mes tickets assignés ({{ tickets|length }})
+            {% else %}
+                🎫 Tous les tickets ({{ tickets|length }})
+            {% endif %}
+        </h1>
+        
+        {% if activeRole == 'ROLE_RAPPORTEUR' %}
+            <a href="{{ path('ticket_new') }}" class="btn-new-ticket">
+                ➕ Créer un nouveau ticket
+            </a>
+        {% endif %}
+    </div>
+
+    {% if tickets|length > 0 %}
+        <table class="tickets-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titre</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                    <th>Priorité</th>
+                    <th>Projet</th>
+                    {% if activeRole != 'ROLE_RAPPORTEUR' %}
+                        <th>Rapporteur</th>
+                    {% endif %}
+                    {% if activeRole != 'ROLE_DEV' %}
+                        <th>Développeur</th>
+                    {% endif %}
+                    <th>Créé le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>
+                            <span class="ticket-id">#{{ ticket.ticketId }}</span>
+                        </td>
+                        <td>
+                            <strong>{{ ticket.titreTicket }}</strong>
+                            {% if ticket.dateEcheance %}
+                                <div class="ticket-meta">
+                                    📅 Échéance: {{ ticket.dateEcheance|date('d/m/Y') }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ ticket.typeTicket ?? 'Non défini' }}</td>
+                        <td>
+                            <span class="status-badge status-{{ ticket.statutTicket|lower|replace({' ': '-'}) }}">
+                                {{ ticket.statutTicket ?? 'Nouveau' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="priority-badge priority-{{ ticket.prioriteTicket|lower|replace({' ': '-'}) }}">
+                                {{ ticket.prioriteTicket ?? 'Normale' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if ticket.projet %}
+                                {{ ticket.projet.nomProjet }}
+                                <div class="ticket-meta">{{ ticket.projet.client.nomClient }}</div>
+                            {% else %}
+                                Non défini
+                            {% endif %}
+                        </td>
+                        {% if activeRole != 'ROLE_RAPPORTEUR' %}
+                            <td>
+                                {% if ticket.rapporteur %}
+                                    {{ ticket.rapporteur.prenom }} {{ ticket.rapporteur.nom }}
+                                {% else %}
+                                    Non défini
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        {% if activeRole != 'ROLE_DEV' %}
+                            <td>
+                                {% if ticket.developpeur %}
+                                    {{ ticket.developpeur.prenom }} {{ ticket.developpeur.nom }}
+                                {% else %}
+                                    <em>Non assigné</em>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td>{{ ticket.dateCreation ? ticket.dateCreation|date('d/m/Y H:i') : 'N/A' }}</td>
+                        <td>
+                            <div class="ticket-actions">
+                                <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn-action btn-view">
+                                    👁️ Voir
+                                </a>
+                                {% if (activeRole == 'ROLE_RAPPORTEUR' and ticket.rapporteur == app.user) 
+                                   or (activeRole == 'ROLE_DEV' and ticket.developpeur == app.user)
+                                   or activeRole == 'ROLE_ADMIN' %}
+                                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}" class="btn-action btn-edit">
+                                        ✏️ Modifier
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-tickets">
+            <h3>😴 Aucun ticket trouvé</h3>
+            <p>
+                {% if activeRole == 'ROLE_RAPPORTEUR' %}
+                    Vous n'avez pas encore créé de tickets. <a href="{{ path('ticket_new') }}">Créer votre premier ticket</a>
+                {% elseif activeRole == 'ROLE_DEV' %}
+                    Aucun ticket ne vous est actuellement assigné.
+                {% else %}
+                    Aucun ticket n'a été créé dans le système.
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
