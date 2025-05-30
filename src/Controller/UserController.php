@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailService;
 use App\Entity\User;
 use App\Form\UserForm;
 use App\Repository\UserRepository;
@@ -95,4 +96,13 @@ public function new(
 
         return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
+    
+/*     #[Route('/test-email', name: 'test_email')]
+    public function testEmail(MailService $mailService): Response
+    {
+        $mailService->sendEmail('tonadresse@mailtrap.io', 'Test de notification', 'Ceci est un e-mail de test.');
+        return new Response('Email envoyé !');
+    }
+
+ */
 }
