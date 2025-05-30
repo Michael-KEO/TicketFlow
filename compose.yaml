@@ -16,8 +16,20 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    working_dir: /var/www
 
-###> symfony/mercure-bundle ###
+
+  ###> symfony/mercure-bundle ###
   mercure:
     image: dunglas/mercure
     restart: unless-stopped
