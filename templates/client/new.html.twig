@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un client{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Créer un nouveau client</h2>
+
+    <div class="card p-4">
+        {{ form_start(form) }}
+            <div class="mb-3">
+                {{ form_row(form.client_id) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.nomClient) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.emailClient) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.numeroClient) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.adresseClient) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.referentClient) }}
+            </div>
+
+            <button class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('client_index') }}" class="btn btn-secondary ms-2">Annuler</a>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

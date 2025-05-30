@@ -25,6 +25,8 @@
 
                 {% if activeRole == 'ROLE_ADMIN' %}
                     <a href="{{ path('user_index') }}">Gérer les utilisateurs</a>
+                    <a href="{{ path('client_index') }}">Gérer les clients</a>
+                    <a href="{{ path('app_projet_index') }}">Gérer les projets</a>
                 {% elseif activeRole == 'ROLE_RAPPORTEUR' %}
                     <a href="#">Tickets à traiter</a>
                 {% elseif activeRole == 'ROLE_DEV' %}

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau projet{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card p-4 shadow rounded">
+            <h1 class="mb-4 text-center">Créer un nouveau projet 🛠️</h1>
+
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.projet_id) }}
+                        {{ form_widget(form.projet_id, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.nomProjet) }}
+                        {{ form_widget(form.nomProjet, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    {{ form_label(form.descriptionProjet) }}
+                    {{ form_widget(form.descriptionProjet, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.dateDebut) }}
+                        {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.dateFin) }}
+                        {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.satut) }}
+                        {{ form_widget(form.satut, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.client) }}
+                        {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+                    <a href="{{ path('app_projet_index') }}" class="btn btn-secondary">← Retour à la liste</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📋 Liste des clients</h2>
+        <a href="{{ path('client_new') }}" class="btn btn-primary">+ Créer un client</a>
+    </div>
+
+    <table class="table table-bordered table-striped align-middle text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Adresse</th>
+                <th>Référent</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for client in clients %}
+            <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.nomClient }}</td>
+                <td>{{ client.emailClient }}</td>
+                <td>{{ client.numeroClient }}</td>
+                <td>{{ client.adresseClient }}</td>
+                <td>{{ client.referentClient }}</td>
+                <td>
+                    <a href="{{ path('client_show', {'id': client.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                    <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn btn-success btn-sm">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucun client enregistré.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

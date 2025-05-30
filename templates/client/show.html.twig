@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du client{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">🧾 Détails du client</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>ID :</strong> {{ client.id }}</li>
+                <li class="list-group-item"><strong>Nom :</strong> {{ client.nomClient }}</li>
+                <li class="list-group-item"><strong>Email :</strong> {{ client.emailClient }}</li>
+                <li class="list-group-item"><strong>Téléphone :</strong> {{ client.numeroClient }}</li>
+                <li class="list-group-item"><strong>Adresse :</strong> {{ client.adresseClient }}</li>
+                <li class="list-group-item"><strong>Référent :</strong> {{ client.referentClient }}</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ path('client_index') }}" class="btn btn-secondary">⬅ Retour</a>
+                
+                <a href="{{ path('client_edit', {'id': client.id}) }}" class="btn btn-success">✏ Modifier</a>
+
+                <form method="post" action="{{ path('client_delete', {'id': client.id}) }}" onsubmit="return confirm('Supprimer ce client ?');" class="d-inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}">
+                    <button class="btn btn-danger">🗑 Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
