@@ -1,3 +1,224 @@
+/* Import de la police (si pas déjà dans un autre import CSS global) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 body {
-    background-color: skyblue;
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8; /* Fond uni sobre type GLPi */
+    color: #333; /* Couleur de texte principale un peu plus douce */
+    min-height: 100vh;
+    display: flex; /* Permet au footer de se coller en bas si le contenu est court */
+    flex-direction: column;
+}
+
+.app-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header --- */
+.app-header {
+    background: #1e293b; /* Bleu nuit/gris foncé, bien */
+    color: #fff;
+    padding: 0.8rem 2rem; /* Un peu moins de padding vertical peut suffire */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre plus subtile */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Assurer que le header est au-dessus */
+}
+
+.app-header .logo a {
+    font-size: 1.4rem; /* Légèrement réduit pour équilibre */
+    font-weight: 600;
+    color: #60a5fa; /* Votre bleu pour le logo */
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.app-header .main-navigation {
+    display: flex;
+    gap: 1.5rem; /* Espacement ajusté */
+}
+
+.app-header .main-navigation a {
+    color: #e2e8f0; /* Blanc cassé pour moins de contraste brut */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem; /* Un peu plus petit pour un look plus "pro" */
+    position: relative;
+    transition: color 0.2s ease-in-out;
+    padding: 0.5rem 0;
+}
+
+.app-header .main-navigation a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #60a5fa; /* Accent bleu */
+    transition: width .2s ease-in-out;
+    position: absolute;
+    bottom: -2px; /* Ajusté */
+    left: 0;
+}
+
+.app-header .main-navigation a:hover,
+.app-header .main-navigation a.active { /* Ajouter une classe .active pour la page courante */
+    color: #fff; /* Blanc franc au survol */
+}
+.app-header .main-navigation a:hover::after,
+.app-header .main-navigation a.active::after {
+    width: 100%;
+}
+
+.app-header .user-info {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.app-header .user-info strong {
+    font-weight: 500;
+}
+
+/* --- Main Content --- */
+.app-main-content {
+    flex: 1; /* Prend l'espace restant */
+    padding: 2rem 1.5rem; /* Padding standard */
+    display: flex;       /* Pour centrer .content-wrapper */
+    flex-direction: column; /* Pour que le flash message soit au-dessus */
+    align-items: center; /* Centre .content-wrapper horizontalement */
+}
+
+.content-wrapper {
+    background: #fff;
+    border-radius: 8px; /* Arrondis plus subtils */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07); /* Ombre plus douce */
+    padding: 2rem;
+    width: 100%;
+    max-width: 960px; /* Légèrement plus large, mais toujours centré */
+    /* animation: fadeIn 0.5s ease-out; Retiré pour sobriété, ou plus subtil si gardé */
+}
+
+/* Keyframe pour fadeIn si vous le gardez */
+/* @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+} */
+
+/* --- Boutons --- */
+.btn {
+    padding: 0.5rem 1.2rem; /* Ajustement du padding */
+    background-color: #2563eb; /* Couleur unie sobre */
+    color: #fff;
+    border: none;
+    border-radius: 6px; /* Arrondi subtil */
+    font-weight: 500; /* Un peu moins gras */
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block; /* Pour que le padding/margin fonctionne bien */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    outline: none;
+}
+.btn:hover, .btn:focus {
+    background-color: #1d4ed8; /* Bleu plus foncé au survol */
+    /* transform: translateY(-1px); Optionnel : effet de soulèvement léger */
+}
+.btn-logout { /* Différenciation possible */
+    background-color: #dc3545; /* Rouge pour déconnexion, exemple */
+}
+.btn-logout:hover {
+    background-color: #c82333;
+}
+
+
+/* --- Footer --- */
+.app-footer {
+    background-color: #e9ecef; /* Fond clair pour le footer */
+    color: #495057; /* Texte plus sombre pour contraste */
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    border-top: 1px solid #dee2e6; /* Séparateur fin */
+}
+
+/* --- Flash Messages --- */
+.flash-messages {
+    width: 100%;
+    max-width: 960px; /* Même largeur que le content-wrapper */
+    margin-bottom: 1rem; /* Espace avant le contenu principal */
+}
+.alert {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+.alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+.alert-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+}
+
+
+/* --- Responsive --- */
+@media (max-width: 768px) { /* Point de rupture un peu plus grand */
+    .app-header {
+        padding: 0.8rem 1rem;
+        flex-direction: column; /* Logo en haut, puis nav, puis user-info */
+        align-items: flex-start;
+    }
+    .app-header .main-navigation {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        gap: 1rem;
+        flex-wrap: wrap; /* Permet aux liens de passer à la ligne */
+    }
+    .app-header .user-info {
+        width: 100%;
+        justify-content: space-between; /* Met le bouton à droite sur mobile */
+        margin-top: 0.5rem;
+    }
+
+    .app-main-content {
+        padding: 1rem 0.5rem;
+    }
+    .content-wrapper {
+        padding: 1.5rem 1rem;
+        border-radius: 6px;
+    }
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header .main-navigation a {
+        font-size: 0.9rem;
+    }
+    .app-header .logo a {
+        font-size: 1.3rem;
+    }
 }

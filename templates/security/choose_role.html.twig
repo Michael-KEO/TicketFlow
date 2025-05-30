@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choix du rôle{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Choisissez votre rôle</h2>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        {% for role in roles %}
+            {% if role != 'ROLE_USER' %}
+                <form method="post" action="{{ path('select_role') }}" style="display: inline-block;">
+                    <input type="hidden" name="role" value="{{ role }}">
+                    <button type="submit" class="btn btn-primary px-4">
+                        {{ role|replace({'ROLE_': ''})|lower|capitalize }}
+                    </button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
