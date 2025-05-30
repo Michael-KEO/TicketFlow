@@ -147,6 +147,12 @@
         color: #666;
     }
 
+    .ticket-title-cell {
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 250px;
+    }
+
     @media (max-width: 768px) {
         .tickets-table {
             font-size: 0.85rem;
@@ -209,7 +215,7 @@
                         <td>
                             <span class="ticket-id">#{{ ticket.ticketId }}</span>
                         </td>
-                        <td>
+                        <td class="ticket-title-cell">
                             <strong>{{ ticket.titreTicket }}</strong>
                             {% if ticket.dateEcheance %}
                                 <div class="ticket-meta">

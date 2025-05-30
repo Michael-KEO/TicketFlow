@@ -6,6 +6,7 @@ use App\Entity\Ticket;
 use App\Entity\Commentaire;
 use App\Form\TicketType;
 use App\Form\CommentaireType;
+use App\Form\CommentaireTypeForm;
 use App\Repository\TicketRepository;
 use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -107,7 +108,7 @@ class TicketController extends AbstractController
 
         // Formulaire pour ajouter un commentaire
         $commentaire = new Commentaire();
-        $commentForm = $this->createForm(CommentaireType::class, $commentaire);
+        $commentForm = $this->createForm(CommentaireTypeForm::class, $commentaire);
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
