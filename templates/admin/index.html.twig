@@ -1,10 +1,89 @@
+{# templates/admin/dashboard.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard Admin{% endblock %}
+{% block title %}Tableau de bord - Administration{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
 {% block body %}
-    <div class="example-wrapper">
-        <h1>Bienvenue Admin 👑</h1>
-        <p>Bienvenue sur le tableau de bord d'administration.</p>
+    <div class="container mt-4" data-controller="admin-dashboard-charts"
+         data-admin-dashboard-charts-tickets-by-status-value="{{ ticketsByStatus|json_encode(constant('JSON_FORCE_OBJECT')) }}"
+         data-admin-dashboard-charts-tickets-by-dev-value="{{ ticketsByDev|json_encode(constant('JSON_FORCE_OBJECT')) }}"
+         data-admin-dashboard-charts-tickets-evolution-value="{{ ticketsEvolution|json_encode(constant('JSON_FORCE_OBJECT')) }}">
+        <h1>Tableau de bord d'administration</h1>
+        <p>Bienvenue {{ app.user.prenom }} ! Voici quelques statistiques.</p>
+
+
+        {# Section d'informations générales (si nécessaire) #}
+        <div class="row mt-4">
+            {# Vous pouvez garder vos cartes/widgets existants ici #}
+        </div>
+
+        {# Section des statistiques #}
+        <div class="mt-5">
+            <h2>Statistiques et rapports</h2>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Tickets par statut ({{ startDate|date('d/m/Y') }} - {{ endDate|date('d/m/Y') }})
+                        </div>
+                        <div class="card-body">
+                            <canvas id="ticketsByStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Répartition des tickets par développeur
+                        </div>
+                        <div class="card-body">
+                            <canvas id="ticketsByDevChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Délai moyen de résolution
+                        </div>
+                        <div class="card-body text-center">
+                            <h2 class="display-4">
+                                {% if avgResolutionTime is not null %}
+                                    {{ avgResolutionTime|number_format(1, ',', ' ') }} jours
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </h2>
+                            <p class="text-muted">Temps moyen entre la création et la résolution d'un ticket</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Évolution des tickets créés par mois
+                        </div>
+                        <div class="card-body">
+                            <canvas id="ticketsEvolutionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

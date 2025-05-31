@@ -28,7 +28,7 @@
         <a href="{{ path('client_index') }}">📋 Clients</a>
         <a href="{{ path('app_projet_index') }}">📁 Projets</a>
         <a href="{{ path('ticket_index') }}">🎫 Tous les tickets</a>
-        <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
+        <a href="{{ path('admin_dashboard') }}">📊 Dashboard</a>
 
     {% elseif activeRole == 'ROLE_RAPPORTEUR' %}
         <a href="{{ path('ticket_new') }}">➕ Nouveau ticket</a>

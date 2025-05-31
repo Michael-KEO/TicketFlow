@@ -9,6 +9,10 @@
                 "enabled": false,
                 "fetch": "eager"
             }
+        },
+        "admin-dashboard-charts": {
+            "enabled": true,
+            "fetch": "lazy"
         }
     },
     "entrypoints": []

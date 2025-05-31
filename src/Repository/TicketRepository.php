@@ -7,6 +7,8 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Query\Expr\Join;
+
 
 /**
  * @extends ServiceEntityRepository<Ticket>
@@ -147,5 +149,103 @@ class TicketRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Récupère le nombre de tickets par statut sur une période donnée
+     */
+    public function countTicketsByStatusAndPeriod(\DateTime $startDate, \DateTime $endDate): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t.statutTicket, COUNT(t.id) as count')
+            ->where('t.dateCreation BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->groupBy('t.statutTicket')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère la répartition des tickets par développeur
+     */
+    public function countTicketsByDeveloper(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('u.nom, u.prenom, COUNT(t.id) as count')
+            ->leftJoin('t.developpeur', 'u')
+            ->where('t.developpeur IS NOT NULL')
+            ->groupBy('u.id')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Calcule le délai moyen de résolution des tickets (en jours)
+     */
+    public function getAverageResolutionTime(): float|null
+    {
+        // On récupère d'abord les tickets résolus
+        $tickets = $this->createQueryBuilder('t')
+            ->select('t.dateCreation', 't.dateResolution')
+            ->where('t.dateCreation IS NOT NULL')
+            ->andWhere('t.dateResolution IS NOT NULL')
+            ->getQuery()
+            ->getResult();
+
+        if (empty($tickets)) {
+            return null;
+        }
+
+        // Puis on calcule manuellement la différence en jours
+        $totalDays = 0;
+        $count = count($tickets);
+
+        foreach ($tickets as $ticket) {
+            $interval = $ticket['dateCreation']->diff($ticket['dateResolution']);
+            $totalDays += $interval->days;
+        }
+
+        return $count > 0 ? $totalDays / $count : null;
+    }
+
+
+    /**
+     * Récupère les données pour un graphique de l'évolution des tickets par mois
+     */
+    public function getTicketsCreatedByMonth(\DateTime $startDate, \DateTime $endDate): array
+    {
+        $queryBuilder = $this->createQueryBuilder('t')
+            ->select('t.dateCreation')
+            ->where('t.dateCreation BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery();
+
+        $results = $queryBuilder->getResult();
+
+        $monthlyCounts = [];
+        foreach ($results as $row) {
+            $date = $row['dateCreation'];
+            $year = $date->format('Y');
+            $month = $date->format('m');
+            $key = $year . '-' . $month;
+
+            if (!isset($monthlyCounts[$key])) {
+                $monthlyCounts[$key] = [
+                    'year' => (int)$year,
+                    'month' => (int)$month,
+                    'count' => 0,
+                ];
+            }
+            $monthlyCounts[$key]['count']++;
+        }
+
+        // Sort results by year and month
+        uksort($monthlyCounts, function($a, $b) {
+            return strtotime($a . '-01') - strtotime($b . '-01');
+        });
+
+        return array_values($monthlyCounts);
     }
 }

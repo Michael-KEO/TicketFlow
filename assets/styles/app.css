@@ -222,3 +222,11 @@ body {
         font-size: 1.3rem;
     }
 }
+
+/* --- Admin Dashboard Charts --- */
+/* Limit the height of chart canvas elements to prevent them from being too large */
+#ticketsByStatusChart, #ticketsByDevChart, #ticketsEvolutionChart {
+    max-height: 300px; /* Adjust the value as needed */
+    width: 100% !important; /* Ensure charts take full width of their container */
+    height: auto !important; /* Allow height to adjust proportionally */
+}
