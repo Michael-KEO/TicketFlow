@@ -116,10 +116,8 @@ Cette méthode est la plus simple pour démarrer rapidement sur n'importe quel s
 
 1.  **Cloner le projet** (idem Docker)
     ```bash
-    git clone [https://github.com/Michael-KEO/TicketFlow.git](https://github.com/Michael-KEO/TicketFlow.git)
+    git clone https://github.com/Michael-KEO/TicketFlow.git
     cd TicketFlow
-    git fetch test
-    git checkout test
     ```
 
 2.  **Installer les dépendances PHP**
