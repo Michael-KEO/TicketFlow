@@ -24,7 +24,6 @@ services:
         arguments:
             $senderAddress: '%env(MAILER_FROM_ADDRESS)%'
 
-    services:
     # ...
     App\Service\CommentaireNotificationService:
         arguments:
