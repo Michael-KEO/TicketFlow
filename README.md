@@ -47,10 +47,8 @@ Cette méthode est la plus simple pour démarrer rapidement sur n'importe quel s
 1.  **Cloner le projet** :
     Ouvrez un terminal ou une invite de commande.
     ```bash
-    git clone [https://github.com/Michael-KEO/TicketFlow.git](https://github.com/Michael-KEO/TicketFlow.git)
+    git clone https://github.com/Michael-KEO/TicketFlow.git
     cd TicketFlow
-    git fetch test
-    git checkout test
     ```
 
 2.  **Configuration de l'environnement** :
