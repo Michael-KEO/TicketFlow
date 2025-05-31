@@ -33,7 +33,7 @@ Le développement a été mené en équipe avec GitHub (travail par **branches f
 ## 🐳 Installation & Lancement avec Docker (Recommandé)
 
 
-Pour une installation rapide sur Linux, macOS, ou Windows via WSL, vous pouvez utiliser le script `setup.sh`.
+Pour une installation rapide sur Linux, macOS, ou Windows via WSL, vous pouvez utiliser le script `setup.sh` qui se trouve à la racine du projet.
 Sinon, suivez les étapes manuelles ci-dessous.
 
 Cette méthode est la plus simple pour démarrer rapidement sur n'importe quel système d'exploitation supportant Docker.
