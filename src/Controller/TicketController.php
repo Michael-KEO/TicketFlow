@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Entity\Commentaire;
-use App\Form\TicketType;
-use App\Form\CommentaireType;
+use App\Entity\User;
 use App\Form\CommentaireTypeForm;
+use App\Form\TicketTypeForm;
 use App\Repository\TicketRepository;
 use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,7 +51,7 @@ class TicketController extends AbstractController
         $ticket = new Ticket();
         $activeRole = $request->getSession()->get('active_role');
         
-        $form = $this->createForm(TicketType::class, $ticket, [
+        $form = $this->createForm(TicketTypeForm::class, $ticket, [
             'is_edit' => false,
             'user_role' => $activeRole
         ]);
@@ -147,7 +147,7 @@ class TicketController extends AbstractController
             throw $this->createAccessDeniedException('Vous ne pouvez modifier que les tickets qui vous sont assignés.');
         }
 
-        $form = $this->createForm(TicketType::class, $ticket, [
+        $form = $this->createForm(TicketTypeForm::class, $ticket, [
             'is_edit' => true,
             'user_role' => $activeRole
         ]);
