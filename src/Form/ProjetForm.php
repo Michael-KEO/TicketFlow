@@ -22,7 +22,7 @@ class ProjetForm extends AbstractType
             ->add('satut')
             ->add('client', EntityType::class, [
                 'class' => Client::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nomClient',
             ])
         ;
     }
