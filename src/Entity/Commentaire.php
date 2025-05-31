@@ -19,6 +19,13 @@ class Commentaire
     #[ORM\Column(type: 'datetime')]
     private ?\DateTime $dateCreation = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $dateModification = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $modere = false;
+
+
     #[ORM\ManyToOne(targetEntity: Ticket::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Ticket $ticket = null;
@@ -30,6 +37,7 @@ class Commentaire
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
+        $this->modere = false;
     }
 
     public function getId(): ?int
@@ -56,6 +64,26 @@ class Commentaire
     public function setDateCreation(\DateTime $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
+        return $this;
+    }
+    public function getDateModification(): ?\DateTime
+    {
+        return $this->dateModification;
+    }
+    public function setDateModification(?\DateTime $dateModification): static
+    {
+        $this->dateModification = $dateModification;
+        return $this;
+    }
+
+    public function isModere(): bool
+    {
+        return $this->modere;
+    }
+
+    public function setModere(bool $modere): static
+    {
+        $this->modere = $modere;
         return $this;
     }
 

@@ -146,6 +146,30 @@
     .comments-section {
         margin-top: 2rem;
     }
+    .comment-actions {
+        margin-top: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .comment-moderated {
+        background-color: #fff3e0;
+    }
+
+    .moderation-notice {
+        background-color: #fff3e0;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 4px;
+        color: #f57c00;
+        font-size: 0.85rem;
+    }
+
 
     .comments-header {
         background-color: #0d47a1;
@@ -156,6 +180,7 @@
         align-items: center;
         gap: 0.5rem;
     }
+
 
     .comments-list {
         background: white;
@@ -376,20 +401,54 @@
         <div class="comments-header">
             <span>💬 Commentaires ({{ commentaires|length }})</span>
         </div>
-        
+
         {% if commentaires|length > 0 %}
             <div class="comments-list">
                 {% for commentaire in commentaires %}
-                    <div class="comment">
+                    <div class="comment {% if commentaire.modere is defined and commentaire.modere %}comment-moderated{% endif %}">
                         <div class="comment-header">
-                            <span class="comment-author">
-                                {{ commentaire.auteur.prenom }} {{ commentaire.auteur.nom }}
-                            </span>
+                        <span class="comment-author">
+                            {{ commentaire.auteur.prenom }} {{ commentaire.auteur.nom }}
+                        </span>
+                            <div>
                             <span class="comment-date">
                                 {{ commentaire.dateCreation|date('d/m/Y à H:i') }}
+                                {% if commentaire.dateModification is defined and commentaire.dateModification %}
+                                    <small>(Modifié le {{ commentaire.dateModification|date('d/m/Y à H:i') }})</small>
+                                {% endif %}
                             </span>
+
+                                <div class="comment-actions">
+                                    {% if app.user == commentaire.auteur %}
+                                        <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}" class="btn btn-sm btn-primary">
+                                            ✏️ Modifier
+                                        </a>
+                                    {% endif %}
+
+                                    {% if activeRole == 'ROLE_ADMIN' %}
+                                        {% if commentaire.modere is defined %}
+                                            <a href="{{ path('app_commentaire_moderer', {'id': commentaire.id}) }}" class="btn btn-sm btn-warning">
+                                                {% if commentaire.modere %}✓ Annuler modération{% else %}⚠️ Modérer{% endif %}
+                                            </a>
+                                        {% endif %}
+
+                                        <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">🗑️ Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="comment-content">{{ commentaire.contenu }}</div>
+
+                        <div class="comment-content">
+                            {% if commentaire.modere is defined and commentaire.modere %}
+                                <div class="moderation-notice">
+                                    <i class="fas fa-exclamation-triangle"></i> Ce commentaire a été modéré par un administrateur.
+                                </div>
+                            {% endif %}
+                            {{ commentaire.contenu|nl2br }}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -403,14 +462,13 @@
         <div class="comment-form">
             <h4>✍️ Ajouter un commentaire</h4>
             {{ form_start(commentForm) }}
-                <div class="form-group">
-                    {{ form_widget(commentForm.contenu, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Écrivez votre commentaire...'}}) }}
-                </div>
-                <button type="submit" class="btn btn-success">
-                    💬 Publier le commentaire
-                </button>
+            <div class="form-group">
+                {{ form_widget(commentForm.contenu, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Écrivez votre commentaire...'}}) }}
+            </div>
+            <button type="submit" class="btn btn-success">
+                💬 Publier le commentaire
+            </button>
             {{ form_end(commentForm) }}
         </div>
     </div>
-</div>
 {% endblock %}

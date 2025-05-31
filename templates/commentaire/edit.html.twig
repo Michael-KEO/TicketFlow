@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le commentaire{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="ticket-container">
+            <div class="ticket-header">
+                <h1 class="ticket-title">Modifier votre commentaire</h1>
+                <div class="ticket-id">Ticket #{{ commentaire.ticket.ticketId }}</div>
+            </div>
+
+            <div class="ticket-main">
+                <div class="ticket-details">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'rows': 6}}) }}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        <a href="{{ path('ticket_show', {'id': commentaire.ticket.id}) }}" class="btn btn-secondary">Annuler</a>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
