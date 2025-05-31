@@ -4,17 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Entity\Commentaire;
-use App\Entity\User;
-use App\Form\CommentaireTypeForm;
-use App\Form\TicketTypeForm;
+use App\Form\TicketType;
+use App\Form\CommentaireType;
 use App\Repository\TicketRepository;
 use App\Repository\CommentaireRepository;
+use App\Service\MailNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/ticket')]
 class TicketController extends AbstractController
@@ -51,7 +52,7 @@ class TicketController extends AbstractController
         $ticket = new Ticket();
         $activeRole = $request->getSession()->get('active_role');
         
-        $form = $this->createForm(TicketTypeForm::class, $ticket, [
+        $form = $this->createForm(TicketType::class, $ticket, [
             'is_edit' => false,
             'user_role' => $activeRole
         ]);
@@ -108,7 +109,7 @@ class TicketController extends AbstractController
 
         // Formulaire pour ajouter un commentaire
         $commentaire = new Commentaire();
-        $commentForm = $this->createForm(CommentaireTypeForm::class, $commentaire);
+        $commentForm = $this->createForm(CommentaireType::class, $commentaire);
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
@@ -130,48 +131,56 @@ class TicketController extends AbstractController
             'activeRole' => $activeRole
         ]);
     }
-
     #[Route('/{id}/edit', name: 'ticket_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function edit(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request $request,
+        Ticket $ticket,
+        EntityManagerInterface $entityManager,
+        MailNotificationService $mailService // ← ajout ici
+    ): Response
     {
         $user = $this->getUser();
         $activeRole = $request->getSession()->get('active_role');
-        
+
         // Vérifications des permissions
         if ($activeRole === 'ROLE_RAPPORTEUR' && $ticket->getRapporteur() !== $user) {
             throw $this->createAccessDeniedException('Vous ne pouvez modifier que vos propres tickets.');
         }
-        
         if ($activeRole === 'ROLE_DEV' && $ticket->getDeveloppeur() !== $user && $activeRole !== 'ROLE_ADMIN') {
             throw $this->createAccessDeniedException('Vous ne pouvez modifier que les tickets qui vous sont assignés.');
         }
 
-        $form = $this->createForm(TicketTypeForm::class, $ticket, [
+        $form = $this->createForm(TicketType::class, $ticket, [
             'is_edit' => true,
             'user_role' => $activeRole
         ]);
-        
+
+       
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Si le statut change vers "Résolu" ou "Fermé", enregistrer la date de résolution
-            if (in_array($ticket->getStatutTicket(), ['Résolu', 'Fermé']) && !$ticket->getDateResolution()) {
+            if (in_array($ticket->getStatutTicket(), ['Résolu', 'Fermé', 'Rejeté', 'En cours', 'Ouvert']) && !$ticket->getDateResolution()) {
                 $ticket->setDateResolution(new \DateTime());
             }
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le ticket #' . $ticket->getTicketId() . ' a été mis à jour.');
+            // 💌 Envoie le mail APRÈS flush
+            $mailService->sendStatusUpdate($ticket);
 
+            $this->addFlash('success', 'Le ticket #' . $ticket->getTicketId() . ' a été mis à jour.');
             return $this->redirectToRoute('ticket_show', ['id' => $ticket->getId()]);
         }
+
 
         return $this->render('ticket/edit.html.twig', [
             'ticket' => $ticket,
             'form' => $form,
         ]);
-    }
+        }
+    
+
 
     #[Route('/{id}/delete', name: 'ticket_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -207,4 +216,5 @@ class TicketController extends AbstractController
 
         return $this->redirectToRoute('ticket_show', ['id' => $ticket->getId()]);
     }
+   
 }
