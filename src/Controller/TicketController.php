@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Event\CommentaireCreatedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 
 
 #[Route('/ticket')]
@@ -81,7 +84,7 @@ class TicketController extends AbstractController
 
     #[Route('/{id}', name: 'ticket_show', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function show(Request $request, Ticket $ticket, CommentaireRepository $commentaireRepository, EntityManagerInterface $entityManager): Response
+    public function show(Request $request, Ticket $ticket, CommentaireRepository $commentaireRepository, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher): Response
     {
         $user = $this->getUser();
         $activeRole = $request->getSession()->get('active_role');
@@ -107,10 +110,14 @@ class TicketController extends AbstractController
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
+            // Ajouter cette ligne pour déclencher l'événement
+            $eventDispatcher->dispatch(new CommentaireCreatedEvent($commentaire));
+
             $this->addFlash('success', 'Commentaire ajouté avec succès.');
 
             return $this->redirectToRoute('ticket_show', ['id' => $ticket->getId()]);
         }
+
 
         return $this->render('ticket/show.html.twig', [
             'ticket' => $ticket,
@@ -199,5 +206,6 @@ class TicketController extends AbstractController
 
         return $this->redirectToRoute('ticket_show', ['id' => $ticket->getId()]);
     }
+
 
 }
