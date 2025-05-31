@@ -21,11 +21,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Service\MailService:
-        arguments:
-            $senderAddress: '%env(MAILER_FROM_ADDRESS)%'
-
-    # ...
     App\Service\CommentaireNotificationService:
         arguments:
             $senderAddress: '%env(MAILER_FROM_ADDRESS)%'

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Commentaire;
 use App\Entity\Ticket;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
@@ -40,5 +41,30 @@ class MailNotificationService
             ]);
 
         $this->mailer->send($email);
+    }
+    public function sendCommentNotification(Commentaire $commentaire): void
+    {
+        $ticket = $commentaire->getTicket();
+        $auteur = $commentaire->getAuteur();
+
+        if ($ticket->getDeveloppeur()) {
+            $to = $ticket->getDeveloppeur()->getEmail();
+
+            $html = "
+            <p>Bonjour {$ticket->getDeveloppeur()->getPrenom()} {$ticket->getDeveloppeur()->getNom()}</p>
+            <p>Un nouveau commentaire a été ajouté sur le ticket <strong>{$ticket->getTitreTicket()}</strong>.</p>
+            <p><strong>Auteur :</strong> {$auteur->getPrenom()} {$auteur->getNom()}</p>
+            <p><strong>Contenu :</strong> {$commentaire->getContenu()}</p>
+            <p>Bonne journée,<br>L'équipe TicketFlow</p>
+        ";
+
+            $email = (new TemplatedEmail())
+                ->from('ticketflow.notifications@gmail.com')
+                ->to($to)
+                ->subject('Nouveau commentaire sur le ticket #' . $ticket->getId())
+                ->html($html);
+
+            $this->mailer->send($email);
+        }
     }
 }
