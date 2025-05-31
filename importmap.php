@@ -31,7 +31,4 @@ return [
     '@kurkle/color' => [
         'version' => '0.3.4',
     ],
-    'admin-dashboard-charts' => [
-        'path' => './assets/controllers/admin_dashboard_charts_controller.js',
-    ],
 ];

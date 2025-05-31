@@ -9,10 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-4" data-controller="admin-dashboard-charts"
-         data-admin-dashboard-charts-tickets-by-status-value="{{ ticketsByStatus|json_encode(constant('JSON_FORCE_OBJECT')) }}"
-         data-admin-dashboard-charts-tickets-by-dev-value="{{ ticketsByDev|json_encode(constant('JSON_FORCE_OBJECT')) }}"
-         data-admin-dashboard-charts-tickets-evolution-value="{{ ticketsEvolution|json_encode(constant('JSON_FORCE_OBJECT')) }}">
+    <div class="container mt-4">
         <h1>Tableau de bord d'administration</h1>
         <p>Bienvenue {{ app.user.prenom }} ! Voici quelques statistiques.</p>
 
@@ -86,4 +83,101 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Graphique des tickets par statut
+            const statusCtx = document.getElementById('ticketsByStatusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'pie',
+                data: {
+                    labels: [
+                        {% for statusData in ticketsByStatus %}
+                        '{{ statusData.statutTicket ?? "Non défini" }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        data: [
+                            {% for statusData in ticketsByStatus %}
+                            {{ statusData.count }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            '#4CAF50', '#FFC107', '#F44336', '#2196F3', '#9C27B0', '#607D8B'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // Graphique des tickets par développeur
+            const devCtx = document.getElementById('ticketsByDevChart').getContext('2d');
+            new Chart(devCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for dev in ticketsByDev %}
+                        '{{ dev.prenom }} {{ dev.nom }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Nombre de tickets assignés',
+                        data: [
+                            {% for dev in ticketsByDev %}
+                            {{ dev.count }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: '#2196F3'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique d'évolution des tickets
+            const evolutionCtx = document.getElementById('ticketsEvolutionChart').getContext('2d');
+            new Chart(evolutionCtx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        {% for item in ticketsEvolution %}
+                        '{{ item.month }}/{{ item.year }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Tickets créés',
+                        data: [
+                            {% for item in ticketsEvolution %}
+                            {{ item.count }},
+                            {% endfor %}
+                        ],
+                        borderColor: '#4CAF50',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}

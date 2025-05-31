@@ -259,7 +259,6 @@
             "assets/controllers.json",
             "assets/controllers/csrf_protection_controller.js",
             "assets/controllers/hello_controller.js"
-            "assets/controllers/admin_dashboard_charts_controller.js"
         ]
     },
     "symfony/translation": {
