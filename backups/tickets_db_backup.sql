@@ -40,7 +40,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (1,1,'Seynabou','je-suis-fatiguee@jevous.jure','56789','2 rue Dev Web','Legroupe');
+INSERT INTO `client` VALUES (1,1,'Dev Web','Thales@groupe.com','+330784862510','2 rue Dev Web','Mr AIT SAADI Nadjib');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,12 +57,14 @@ CREATE TABLE `commentaire` (
                                `auteur_id` int(11) NOT NULL,
                                `contenu` longtext NOT NULL,
                                `date_creation` datetime NOT NULL,
+                               `date_modification` datetime DEFAULT NULL,
+                               `modere` tinyint(1) NOT NULL,
                                PRIMARY KEY (`id`),
                                KEY `IDX_67F068BC700047D2` (`ticket_id`),
                                KEY `IDX_67F068BC60BB6FE6` (`auteur_id`),
                                CONSTRAINT `FK_67F068BC60BB6FE6` FOREIGN KEY (`auteur_id`) REFERENCES `user` (`id`),
                                CONSTRAINT `FK_67F068BC700047D2` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +73,7 @@ CREATE TABLE `commentaire` (
 
 LOCK TABLES `commentaire` WRITE;
 /*!40000 ALTER TABLE `commentaire` DISABLE KEYS */;
-INSERT INTO `commentaire` VALUES (1,4,6,'Faut que tu puisses le faire vite!','2025-05-30 13:12:22');
+INSERT INTO `commentaire` VALUES (1,4,6,'Faut que tu puisses le faire vite!','2025-05-30 13:12:22',NULL,0);
 /*!40000 ALTER TABLE `commentaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +98,7 @@ CREATE TABLE `doctrine_migration_versions` (
 
 LOCK TABLES `doctrine_migration_versions` WRITE;
 /*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
-INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20250526181623','2025-05-29 09:55:22',66),('DoctrineMigrations\\Version20250526201609','2025-05-29 09:55:23',44),('DoctrineMigrations\\Version20250527185439','2025-05-29 09:55:23',23),('DoctrineMigrations\\Version20250527215939','2025-05-29 09:55:23',46),('DoctrineMigrations\\Version20250527224133','2025-05-29 09:55:23',21),('DoctrineMigrations\\Version20250528001253','2025-05-29 09:55:23',448),('DoctrineMigrations\\Version20250530093450','2025-05-30 13:01:08',75),('DoctrineMigrations\\Version20250530110538','2025-05-30 13:05:55',253);
+INSERT INTO `doctrine_migration_versions` VALUES ('DoctrineMigrations\\Version20250526181623','2025-05-29 09:55:22',66),('DoctrineMigrations\\Version20250526201609','2025-05-29 09:55:23',44),('DoctrineMigrations\\Version20250527185439','2025-05-29 09:55:23',23),('DoctrineMigrations\\Version20250527215939','2025-05-29 09:55:23',46),('DoctrineMigrations\\Version20250527224133','2025-05-29 09:55:23',21),('DoctrineMigrations\\Version20250528001253','2025-05-29 09:55:23',448),('DoctrineMigrations\\Version20250530093450','2025-05-30 13:01:08',75),('DoctrineMigrations\\Version20250530110538','2025-05-30 13:05:55',253),('DoctrineMigrations\\Version20250531113659','2025-05-31 11:37:14',51);
 /*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +194,7 @@ CREATE TABLE `ticket` (
                           CONSTRAINT `FK_97A0ADA32AF5D182` FOREIGN KEY (`rapporteur_id`) REFERENCES `user` (`id`),
                           CONSTRAINT `FK_97A0ADA384E66085` FOREIGN KEY (`developpeur_id`) REFERENCES `user` (`id`),
                           CONSTRAINT `FK_97A0ADA3C18272` FOREIGN KEY (`projet_id`) REFERENCES `projet` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +203,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (1,1,'Projet pas encore terminé','Évolution','dbchbdsvvgqdsbnx,','Normale','En cours','2025-05-30 12:21:19','2025-06-01 12:20:00','2025-05-30 11:18:49',1,3,3),(2,2,'Erreur 404 Base de donnés','Bug','Probléme avec la base de donné\ncontacter spie','Normale','Nouveau','2025-05-30 12:43:05','2025-05-30 14:42:00',NULL,1,6,6),(3,3,'Projet Symfony','Maintenance','Blabbla','Normale','Nouveau','2025-05-30 13:02:44','2025-05-30 17:02:00',NULL,1,6,5),(4,4,'Developpement d\'une plateforme de tests','Évolution','Dev de c\'est bon','Normale','Résolu','2025-05-30 13:11:25',NULL,'2025-05-30 20:50:03',1,6,8);
+INSERT INTO `ticket` VALUES (1,1,'Projet pas encore terminé','Bug','dbchbdsvvgqdsbnx,','Normale','En cours','2025-05-30 00:00:00','2025-06-01 00:00:00','2025-05-30 00:00:00',1,3,5),(2,2,'Erreur 404 Base de donnés','Bug','Probléme avec la base de donnécontacter spie','Normale','Resolu','2025-05-30 00:00:00','2025-05-30 00:00:00',NULL,1,6,6),(3,3,'Projet Symfony','Maintenance','Blabbla','Normale','Ferme','2025-05-30 00:00:00','2025-05-30 00:00:00','2025-05-31 00:00:00',1,6,8),(4,4,'Developpement d\'une plateforme de tests','Évolution','Dev c\'est bon ahah','Normale','Résolu','2025-05-30 13:11:25',NULL,'2025-05-30 20:50:03',1,6,9),(5,5,'Problème de connexion à la base de donnée','Bug','Lors du lancement de l\'application, une erreur empêche l\'accès à la base de données. Un message d\'erreur du type \"Impossible d\'établir une connexion à la base de données\" s\'affiche. Cela bloque totalement l\'utilisation de l\'application. Le problème survient de manière systématique, même après redémarrage du serveur ou de l\'application.','Haute','Nouveau','2025-06-02 00:00:00','2025-06-01 00:00:00',NULL,1,9,9);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,7 +233,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin@example.com','[\"ROLE_ADMIN\"]','$2y$13$gIwS8TuHeGthMSEInPv2b.3WVhLzB8qA8UBJ5ned54xi9xHZlB6Gq','Super','Admin',0),(3,'hello-from-the@other.side','{\"0\":\"ROLE_DEV\",\"1\":\"ROLE_RAPPORTEUR\",\"3\":\"ROLE_ADMIN\"}','$2y$13$VE/79M6OkbIky0jVJlqjnu0RLwmI2VCGm7hbDXPpa6vRbNA/WTCRy','Zeynab','LaStar',0),(4,'test@t.com','[\"ROLE_ADMIN\"]','$2y$13$pOyYiawwMzwAs8avqEglRO1YYH4GMQ3YHEUWuFzuqMsiA0aNmFXLe','test','test',0),(5,'i-am-dev@example.com','[\"ROLE_DEV\"]','$2y$13$H9n410WFt1wkoQWFdsVFAeSU.RQ0hTbGzzIZ5ANR3bcRgp9pwOS/a','Nabou','NDOYE',0),(6,'lucas@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$r0kaeZexqU4yUv/0foCv4uEOktAehNvJd2hNhSga6M1U2eftiEfmG','lucas','junior',0),(7,'b49d9b712b-ca3140+user1@inbox.mailtrap.io','[\"ROLE_DEV\"]','$2y$13$rohrsoDFQjLPXbO/x/B0luN.T8jJ/KyWziJH4qAeqjRILmh5wbLg.','test','test',0),(8,'ndeyecodoutoure@outlook.fr','[\"ROLE_DEV\"]','$2y$13$.io94MGsRosE3svJlDO8EuWRLw7kTFgjLsTBZWGRF6H0HLEL1a93G','Ndeye Codou','TOURE',0),(9,'keomichael10@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$luypVu.uqztymo6y6tAhg..eXmS16zXA6FdwfekxxvQkcLuH7YSQm','Michael','KEO',0);
+INSERT INTO `user` VALUES (1,'admin@example.com','[\"ROLE_ADMIN\"]','$2y$13$gIwS8TuHeGthMSEInPv2b.3WVhLzB8qA8UBJ5ned54xi9xHZlB6Gq','Super','Admin',0),(3,'hello-from-the@other.side','{\"0\":\"ROLE_DEV\",\"1\":\"ROLE_RAPPORTEUR\",\"3\":\"ROLE_ADMIN\"}','$2y$13$VE/79M6OkbIky0jVJlqjnu0RLwmI2VCGm7hbDXPpa6vRbNA/WTCRy','Zeynab','LaStar',0),(4,'test@t.com','[\"ROLE_ADMIN\"]','$2y$13$pOyYiawwMzwAs8avqEglRO1YYH4GMQ3YHEUWuFzuqMsiA0aNmFXLe','test','test',0),(5,'i-am-dev@example.com','[\"ROLE_DEV\"]','$2y$13$H9n410WFt1wkoQWFdsVFAeSU.RQ0hTbGzzIZ5ANR3bcRgp9pwOS/a','Nabou','NDOYE',0),(6,'lucas@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$r0kaeZexqU4yUv/0foCv4uEOktAehNvJd2hNhSga6M1U2eftiEfmG','lucas','junior',0),(7,'b49d9b712b-ca3140+user1@inbox.mailtrap.io','[\"ROLE_DEV\"]','$2y$13$rohrsoDFQjLPXbO/x/B0luN.T8jJ/KyWziJH4qAeqjRILmh5wbLg.','test','test',0),(8,'ndeyecodoutoure@outlook.fr','[\"ROLE_DEV\"]','$2y$13$.io94MGsRosE3svJlDO8EuWRLw7kTFgjLsTBZWGRF6H0HLEL1a93G','Ndeye Codou','TOURE',0),(9,'keomichael10@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$bLm5vxD/xKDLctwSjverMeJJ8.rQjoBfFmXWaOhYcVVs5cKqEEh56','Michael','KEO',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -244,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31  5:04:40
+-- Dump completed on 2025-05-31 16:41:49
