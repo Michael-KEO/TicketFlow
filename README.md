@@ -46,7 +46,7 @@ Cette méthode est la plus simple pour démarrer rapidement sur n'importe quel s
     git clone https://github.com/Michael-KEO/TicketFlow.git
     cd TicketFlow
     ```
-    Pour une installation rapide sur Linux, macOS, ou Windows via WSL, vous pouvez utiliser le script `setup.sh` qui se trouve à la racine du projet apès avpor cloné le projet. Sinon, suivez les étapes manuelles ci-dessous.
+    Pour une installation rapide sur Linux, macOS, ou Windows via WSL, vous pouvez utiliser le script `setup.sh` qui se trouve à la racine du projet apès avoir cloné le projet. Sinon, suivez les étapes manuelles ci-dessous.
 
 2.  **Configuration de l'environnement** :
     Copiez les fichiers d'environnement exemples.
