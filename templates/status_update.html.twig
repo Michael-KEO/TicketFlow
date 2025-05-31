@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket mis à jour</title>
+</head>
+<body>
+    <h2>Bonjour {{ user.nom }} {{ user.prenom }},</h2>
+
+    <p>Votre ticket <strong>#{{ ticket.id }}</strong> a été mis à jour.</p>
+
+    <ul>
+        <li><strong>Titre :</strong> {{ ticket.titreTicket }}</li>
+        <li><strong>Description :</strong> {{ ticket.descriptionTicket }}</li>
+        <li><strong>Nouveau statut :</strong> {{ ticket.statutTicket }}</li>
+        <li><strong>Priorité :</strong> {{ ticket.prioriteTicket }}</li>
+        <li><strong>Date de mise à jour :</strong> {{ ticket.updatedAt|date('d/m/Y H:i') }}</li>
+    </ul>
+
+    <p>Merci de votre confiance,<br>L'équipe TicketFlow</p>
+</body>
+</html>
+
+
+
