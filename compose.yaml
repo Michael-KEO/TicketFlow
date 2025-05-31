@@ -27,7 +27,7 @@ services:
     ports:
       - "8000:8000"
     working_dir: /var/www
-    command: php -S 0.0.0.0:8000 -t public
+    command: symfony serve --port=8000 --host=0.0.0.0 --no-tls
 
 
 
