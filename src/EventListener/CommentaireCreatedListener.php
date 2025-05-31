@@ -4,14 +4,14 @@
 namespace App\EventListener;
 
 use App\Event\CommentaireCreatedEvent;
-use App\Service\MailService;
+use App\Service\MailNotificationService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CommentaireCreatedListener implements EventSubscriberInterface
 {
-    private MailService $mailService;
+    private MailNotificationService $mailService;
 
-    public function __construct(MailService $mailService)
+    public function __construct(MailNotificationService $mailService)
     {
         $this->mailService = $mailService;
     }
