@@ -24,6 +24,12 @@ Le développement a été mené en équipe avec GitHub (travail par **branches f
 
 ---
 
+### INPORTANT:
+
+ Les identifiants par défaut de connection sont : **admin@example.com** / **admin**
+
+---
+
 ## 🐳 Installation & Lancement avec Docker (Recommandé)
 
 

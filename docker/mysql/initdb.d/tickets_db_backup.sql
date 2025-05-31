@@ -233,7 +233,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin@example.com','[\"ROLE_ADMIN\"]','$2y$13$gIwS8TuHeGthMSEInPv2b.3WVhLzB8qA8UBJ5ned54xi9xHZlB6Gq','Super','Admin',0),(3,'hello-from-the@other.side','{\"0\":\"ROLE_DEV\",\"1\":\"ROLE_RAPPORTEUR\",\"3\":\"ROLE_ADMIN\"}','$2y$13$VE/79M6OkbIky0jVJlqjnu0RLwmI2VCGm7hbDXPpa6vRbNA/WTCRy','Zeynab','LaStar',0),(4,'test@t.com','[\"ROLE_ADMIN\"]','$2y$13$pOyYiawwMzwAs8avqEglRO1YYH4GMQ3YHEUWuFzuqMsiA0aNmFXLe','test','test',0),(5,'i-am-dev@example.com','[\"ROLE_DEV\"]','$2y$13$H9n410WFt1wkoQWFdsVFAeSU.RQ0hTbGzzIZ5ANR3bcRgp9pwOS/a','Nabou','NDOYE',0),(6,'lucas@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$r0kaeZexqU4yUv/0foCv4uEOktAehNvJd2hNhSga6M1U2eftiEfmG','lucas','junior',0),(7,'b49d9b712b-ca3140+user1@inbox.mailtrap.io','[\"ROLE_DEV\"]','$2y$13$rohrsoDFQjLPXbO/x/B0luN.T8jJ/KyWziJH4qAeqjRILmh5wbLg.','test','test',0),(8,'ndeyecodoutoure@outlook.fr','[\"ROLE_DEV\"]','$2y$13$.io94MGsRosE3svJlDO8EuWRLw7kTFgjLsTBZWGRF6H0HLEL1a93G','Ndeye Codou','TOURE',0),(9,'keomichael10@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$bLm5vxD/xKDLctwSjverMeJJ8.rQjoBfFmXWaOhYcVVs5cKqEEh56','Michael','KEO',0);
+INSERT INTO `user` VALUES (1,'admin@example.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$A4s.ikQ6zbM7nNL6dl3dUejD6KpxrWMV0bmv.gvvbAZATJ8CXCloO','Super','Admin',0),(3,'hello-from-the@other.side','{\"0\":\"ROLE_DEV\",\"1\":\"ROLE_RAPPORTEUR\",\"3\":\"ROLE_ADMIN\"}','$2y$13$VE/79M6OkbIky0jVJlqjnu0RLwmI2VCGm7hbDXPpa6vRbNA/WTCRy','Zeynab','LaStar',0),(4,'test@t.com','[\"ROLE_ADMIN\"]','$2y$13$pOyYiawwMzwAs8avqEglRO1YYH4GMQ3YHEUWuFzuqMsiA0aNmFXLe','test','test',0),(5,'i-am-dev@example.com','[\"ROLE_DEV\"]','$2y$13$H9n410WFt1wkoQWFdsVFAeSU.RQ0hTbGzzIZ5ANR3bcRgp9pwOS/a','Nabou','NDOYE',0),(6,'lucas@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$r0kaeZexqU4yUv/0foCv4uEOktAehNvJd2hNhSga6M1U2eftiEfmG','lucas','junior',0),(7,'b49d9b712b-ca3140+user1@inbox.mailtrap.io','[\"ROLE_DEV\"]','$2y$13$rohrsoDFQjLPXbO/x/B0luN.T8jJ/KyWziJH4qAeqjRILmh5wbLg.','test','test',0),(8,'ndeyecodoutoure@outlook.fr','[\"ROLE_DEV\"]','$2y$13$.io94MGsRosE3svJlDO8EuWRLw7kTFgjLsTBZWGRF6H0HLEL1a93G','Ndeye Codou','TOURE',0),(9,'keomichael10@gmail.com','[\"ROLE_ADMIN\",\"ROLE_DEV\",\"ROLE_RAPPORTEUR\"]','$2y$13$bLm5vxD/xKDLctwSjverMeJJ8.rQjoBfFmXWaOhYcVVs5cKqEEh56','Michael','KEO',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -246,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31 16:41:49
+-- Dump completed on 2025-05-31 17:46:26
