@@ -202,13 +202,6 @@ Cette méthode est la plus simple pour démarrer rapidement sur n'importe quel s
 
 ---
 
-## 📎 Annexes (Exemples de ce qui pourrait être inclus)
-
-* Schéma de la base de données : `docs/schema_bdd.png` (à générer ou dessiner)
-* Captures d’écran : dossier `/screenshots`
-
----
-
 ## 🧑‍💻 Équipe Projet
 
 | Membre         | Rôle Principal Attribué (exemple basé sur le README original) |
