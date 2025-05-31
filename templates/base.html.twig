@@ -20,22 +20,26 @@
 
             {% set activeRole = app.session.get('active_role') %}
 
-            <nav class="main-navigation">
-                <a href="{{ path('homepage') }}">Accueil</a>
+<nav class="main-navigation">
+    <a href="{{ path('homepage') }}">Accueil</a>
 
-                {% if activeRole == 'ROLE_ADMIN' %}
-                    <a href="{{ path('user_index') }}">👥 Utilisateurs</a>
-                    <a href="{{ path('ticket_index') }}">🎫 Tous les tickets</a>
-                    <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
-                {% elseif activeRole == 'ROLE_RAPPORTEUR' %}
-                    <a href="{{ path('ticket_new') }}">➕ Nouveau ticket</a>
-                    <a href="{{ path('ticket_index') }}">📋 Mes tickets</a>
-                    <a href="{{ path('reporter_dashboard') }}">📊 Tableau de bord</a>
-                {% elseif activeRole == 'ROLE_DEV' %}
-                    <a href="{{ path('ticket_index') }}">🛠️ Tickets assignés</a>
-                    <a href="{{ path('developer_dashboard') }}">📊 Tableau de bord</a>
-                {% endif %}
-            </nav>
+    {% if activeRole == 'ROLE_ADMIN' %}
+        <a href="{{ path('user_index') }}">👥 Utilisateurs</a>
+        <a href="{{ path('ticket_index') }}">🎫 Tous les tickets</a>
+        <a href="{{ path('client_new') }}">➕ Créer un client</a>
+        <a href="{{ path('app_projet_new') }}">➕ Créer un projet</a>
+        <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
+
+    {% elseif activeRole == 'ROLE_RAPPORTEUR' %}
+        <a href="{{ path('ticket_new') }}">➕ Nouveau ticket</a>
+        <a href="{{ path('ticket_index') }}">📋 Mes tickets</a>
+        <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
+
+    {% elseif activeRole == 'ROLE_DEV' %}
+        <a href="{{ path('ticket_index') }}">🛠️ Tickets assignés</a>
+        <a href="{{ path('app_dashboard') }}">📊 Dashboard</a>
+    {% endif %}
+</nav>
 
             <div class="user-info">
                 {% if app.user %}
