@@ -9,7 +9,6 @@ services:
     ports:
       - "33061:3306"
     volumes:
-      # This will execute any .sql, .sh, .sql.gz files in this directory on container startup
       - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER:-app}", "--password=${MYSQL_PASSWORD:-!ChangeMeUser!}"]

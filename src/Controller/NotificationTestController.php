@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Repository\TicketRepository;
-use App\Service\MailNotificationService;
+use App\Service\MailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class NotificationTestController extends AbstractController
 {
     #[Route('/test-notification/{id}', name: 'test_notification')]
-    public function testNotification(int $id, TicketRepository $ticketRepository, MailNotificationService $mailer): Response
+    public function testNotification(int $id, TicketRepository $ticketRepository, MailService $mailer): Response
     {
         $ticket = $ticketRepository->find($id);
 

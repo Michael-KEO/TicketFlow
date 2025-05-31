@@ -8,8 +8,6 @@
 /var/
 /vendor/
 ###< Symfony Framework ###
-/php-8.4.6-Win32-vs17-x64/
-/php.exe/
 ###> PHPUnit ###
 /phpunit.xml
 .phpunit.result.cache

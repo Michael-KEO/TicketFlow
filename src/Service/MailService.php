@@ -8,16 +8,19 @@ use Symfony\Component\Mime\Email;
 class MailService
 {
     private MailerInterface $mailer;
+    private string $senderAddress;
 
-    public function __construct(MailerInterface $mailer)
+    // Injecter l'adresse d'expédition via le constructeur
+    public function __construct(MailerInterface $mailer, string $senderAddress)
     {
         $this->mailer = $mailer;
+        $this->senderAddress = $senderAddress;
     }
 
     public function sendEmail(string $to, string $subject, string $content): void
     {
         $email = (new Email())
-            ->from('no-reply@ticketflow.com')
+            ->from($this->senderAddress) // Utiliser l'adresse injectée
             ->to($to)
             ->subject($subject)
             ->text($content);

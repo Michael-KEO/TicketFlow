@@ -9,8 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zip \
     # Dépendances pour l'extension intl
     libicu-dev \
-    # Dépendances pour l'extension pdo_pgsql (si vous l'utilisez, sinon pdo_mysql est déjà géré par docker-php-ext-install)
-    # libpq-dev \
     # Dépendances pour l'extension onig (mbstring)
     libonig-dev \
     # Dépendances pour l'extension zip
