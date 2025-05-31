@@ -4,225 +4,368 @@
 
 {% block body %}
 <style>
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --border-radius: 0.75rem;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, var(--gray-50) 0%, #e0e7ff 100%);
+        min-height: 100vh;
+        padding: 2rem 1rem;
+        margin: 0;
+    }
+
     .ticket-edit-container {
-        max-width: 900px;
-        margin: 2rem auto;
-        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
         background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .edit-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid #e0e0e0;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+        color: white;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .edit-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(30px, -30px);
     }
 
     .edit-header h1 {
-        color: #0d47a1;
-        margin: 0;
-        font-size: 1.8rem;
-        font-weight: 600;
+        margin: 0 0 1rem 0;
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
     .ticket-id-badge {
-        background: linear-gradient(135deg, #0d47a1, #1976d2);
-        color: white;
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
         padding: 0.5rem 1rem;
-        border-radius: 20px;
+        border-radius: 2rem;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .current-info {
-        background-color: #f8f9fa;
-        border-left: 4px solid #0d47a1;
-        padding: 1rem;
-        margin-bottom: 2rem;
-        border-radius: 0 6px 6px 0;
+        background: var(--gray-50);
+        padding: 1.5rem 2rem;
+        border-left: 4px solid var(--primary-color);
+        margin: 0;
     }
 
     .current-info h3 {
-        margin: 0 0 0.5rem 0;
-        color: #0d47a1;
-        font-size: 1.1rem;
+        margin: 0 0 0.75rem 0;
+        color: var(--gray-700);
+        font-size: 1.125rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .current-info p {
         margin: 0;
-        color: #666;
-        line-height: 1.5;
+        color: var(--gray-600);
+        font-size: 1rem;
+        background: white;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--gray-200);
+    }
+
+    .permission-notice {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: var(--gray-800);
+        padding: 1.5rem 2rem;
+        border-left: 4px solid var(--warning-color);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .form-container {
+        padding: 2rem;
+    }
+
+    .form-errors {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border: 1px solid #fecaca;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--error-color);
+    }
+
+    .form-errors h4 {
+        margin: 0 0 1rem 0;
+        color: var(--error-color);
+        font-size: 1.125rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .form-section {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 0;
         margin-bottom: 2rem;
     }
 
     .section-title {
-        font-size: 1.2rem;
+        background: var(--gray-50);
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 1.25rem;
         font-weight: 600;
-        color: #333;
-        margin-bottom: 1rem;
+        color: var(--gray-800);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .form-content {
+        padding: 2rem;
     }
 
     .form-group {
         margin-bottom: 1.5rem;
     }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        color: #333;
-        font-size: 1rem;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.75rem;
-        border: 2px solid #e0e0e0;
-        border-radius: 6px;
-        font-family: inherit;
-        font-size: 1rem;
-        transition: all 0.2s;
-        background-color: #fafafa;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #0d47a1;
-        background-color: white;
-        box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
-    }
-
-    .form-control[readonly] {
-        background-color: #f5f5f5;
-        color: #666;
-        cursor: not-allowed;
+    .form-group:last-child {
+        margin-bottom: 0;
     }
 
     .form-row {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
     }
 
-    .form-row-3 {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1rem;
+    .form-row:last-child {
+        margin-bottom: 0;
     }
 
-    .readonly-field {
-        background-color: #f8f9fa;
-        border: 2px dashed #ddd;
-        padding: 0.75rem;
-        border-radius: 6px;
-        color: #666;
-        font-style: italic;
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
     }
 
-    .form-help {
-        font-size: 0.85rem;
-        color: #666;
-        margin-top: 0.25rem;
+    .form-control {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--gray-200);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--gray-900);
+        background: white;
+        transition: all 0.2s ease;
+        font-family: inherit;
     }
 
-    .status-explanation {
-        background-color: #e3f2fd;
-        border: 1px solid #90caf9;
-        border-radius: 6px;
-        padding: 1rem;
-        margin-top: 0.5rem;
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        transform: translateY(-1px);
     }
 
-    .status-explanation h4 {
-        margin: 0 0 0.5rem 0;
-        font-size: 0.9rem;
-        color: #0d47a1;
+    .form-control:hover {
+        border-color: var(--gray-300);
     }
 
-    .status-explanation ul {
-        margin: 0;
-        padding-left: 1.2rem;
-        font-size: 0.85rem;
-        color: #0d47a1;
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+        font-family: inherit;
+    }
+
+    select.form-control {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 3rem;
+        appearance: none;
     }
 
     .form-actions {
         display: flex;
         gap: 1rem;
-        justify-content: center;
-        margin-top: 2rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #e0e0e0;
+        justify-content: flex-end;
+        padding: 2rem;
+        background: var(--gray-50);
+        border-top: 1px solid var(--gray-200);
+        margin: 0 -2rem -2rem -2rem;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
     }
 
     .btn {
-        padding: 0.75rem 2rem;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.2s;
+        padding: 0.875rem 2rem;
         border: none;
-        cursor: pointer;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        justify-content: center;
+        min-width: auto;
     }
 
     .btn-success {
-        background: linear-gradient(135deg, #2e7d32, #4caf50);
+        background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
         color: white;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
     }
 
     .btn-secondary {
-        background-color: #666;
-        color: white;
+        background: var(--gray-100);
+        color: var(--gray-700);
+        border: 1px solid var(--gray-300);
     }
 
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        color: white;
+    .btn-secondary:hover {
+        background: var(--gray-200);
+        transform: translateY(-1px);
+        color: var(--gray-800);
     }
 
-    .permission-notice {
-        background-color: #fff3e0;
-        border: 1px solid #ffb74d;
-        border-radius: 6px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        color: #e65100;
+    .form-errors ul {
+        margin: 0;
+        padding-left: 1.5rem;
     }
 
+    .form-errors li {
+        color: var(--error-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .field-error {
+        color: var(--error-color);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
-        .ticket-edit-container {
-            margin: 1rem;
-            padding: 1rem;
+        body {
+            padding: 1rem 0.5rem;
         }
-        
+
         .edit-header {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
+            padding: 1.5rem;
         }
-        
-        .form-row, .form-row-3 {
+
+        .edit-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .current-info,
+        .form-container {
+            padding: 1.5rem;
+        }
+
+        .form-row {
             grid-template-columns: 1fr;
+            gap: 1rem;
         }
-        
+
         .form-actions {
-            flex-direction: column;
+            flex-direction: column-reverse;
+            padding: 1.5rem;
         }
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    /* Loading state */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    /* Focus visible for accessibility */
+    .btn:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
     }
 </style>
 
@@ -238,7 +381,7 @@
     </div>
 
     {% set activeRole = app.session.get('active_role') %}
-    
+
     {% if activeRole == 'ROLE_RAPPORTEUR' and ticket.rapporteur != app.user %}
         <div class="permission-notice">
             ⚠️ Vous ne pouvez modifier que vos propres tickets.
@@ -249,7 +392,8 @@
         </div>
     {% else %}
 
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        <div class="form-container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
             {% if not form.vars.valid %}
                 <div class="form-errors">
@@ -258,14 +402,15 @@
                 </div>
             {% endif %}
 
-            <!-- Section Informations de base -->
-            {% if activeRole == 'ROLE_RAPPORTEUR' %}
-                <div class="form-section">
-                    <div class="section-title">📝 Informations de base</div>
-                    
+            <div class="form-section">
+                <div class="section-title">
+                    📋 Modifier les champs du ticket
+                </div>
+                
+                <div class="form-content">
                     <div class="form-group">
                         {{ form_label(form.titreTicket) }}
-                        {{ form_widget(form.titreTicket, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_widget(form.titreTicket, {'attr': {'class': 'form-control', 'placeholder': 'Saisissez le titre du ticket...'}}) }}
                         {{ form_errors(form.titreTicket) }}
                     </div>
 
@@ -275,7 +420,6 @@
                             {{ form_widget(form.typeTicket, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.typeTicket) }}
                         </div>
-
                         <div class="form-group">
                             {{ form_label(form.prioriteTicket) }}
                             {{ form_widget(form.prioriteTicket, {'attr': {'class': 'form-control'}}) }}
@@ -285,7 +429,7 @@
 
                     <div class="form-group">
                         {{ form_label(form.descriptionTicket) }}
-                        {{ form_widget(form.descriptionTicket, {'attr': {'class': 'form-control', 'rows': 6}}) }}
+                        {{ form_widget(form.descriptionTicket, {'attr': {'class': 'form-control', 'rows': 5, 'placeholder': 'Décrivez en détail le problème ou la demande...'}}) }}
                         {{ form_errors(form.descriptionTicket) }}
                     </div>
 
@@ -294,105 +438,112 @@
                         {{ form_widget(form.dateEcheance, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.dateEcheance) }}
                     </div>
-                </div>
-            {% endif %}
 
-            <!-- Section Statut (pour développeurs et admins) -->
-            {% if activeRole == 'ROLE_DEV' or activeRole == 'ROLE_ADMIN' %}
-                <div class="form-section">
-                    <div class="section-title">🔄 Gestion du statut</div>
-                    
-                    <div class="form-group">
-                        {{ form_label(form.statutTicket) }}
-                        {{ form_widget(form.statutTicket, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.statutTicket) }}
-                        
-                        <div class="status-explanation">
-                            <h4>ℹ️ Signification des statuts :</h4>
-                            <ul>
-                                <li><strong>Nouveau :</strong> Ticket non traité</li>
-                                <li><strong>Ouvert :</strong> Ticket pris en compte</li>
-                                <li><strong>En cours :</strong> Résolution en cours</li>
-                                <li><strong>Résolu :</strong> Solution trouvée, en attente de validation</li>
-                                <li><strong>Fermé :</strong> Ticket résolu et validé</li>
-                                <li><strong>Rejeté :</strong> Ticket refusé ou invalide</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {% if activeRole == 'ROLE_ADMIN' and form.developpeur is defined %}
+                    {% if form.projet is defined %}
                         <div class="form-group">
-                            {{ form_label(form.developpeur) }}
-                            {{ form_widget(form.developpeur, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.developpeur) }}
-                            <div class="form-help">Assigner ce ticket à un développeur</div>
+                            {{ form_label(form.projet) }}
+                            {{ form_widget(form.projet, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.projet) }}
                         </div>
                     {% endif %}
-                </div>
-            {% endif %}
 
-            <!-- Informations en lecture seule -->
-            <div class="form-section">
-                <div class="section-title">📊 Informations du ticket</div>
-                
-                <div class="form-row-3">
-                    <div class="form-group">
-                        <label>Projet</label>
-                        <div class="readonly-field">
-                            {% if ticket.projet %}
-                                {{ ticket.projet.nomProjet }}<br>
-                                <small>{{ ticket.projet.client.nomClient }}</small>
-                            {% else %}
-                                Non défini
-                            {% endif %}
-                        </div>
+                    <div class="form-row">
+                        {% if form.ticketId is defined %}
+                            <div class="form-group">
+                                {{ form_label(form.ticketId) }}
+                                {{ form_widget(form.ticketId, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.ticketId) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.dateCreation is defined %}
+                            <div class="form-group">
+                                {{ form_label(form.dateCreation) }}
+                                {{ form_widget(form.dateCreation, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.dateCreation) }}
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <div class="form-group">
-                        <label>Rapporteur</label>
-                        <div class="readonly-field">
-                            {% if ticket.rapporteur %}
-                                {{ ticket.rapporteur.prenom }} {{ ticket.rapporteur.nom }}
-                            {% else %}
-                                Non défini
-                            {% endif %}
-                        </div>
-                    </div>
+                    <div class="form-row">
+                        {% if form.dateResolution is defined %}
+                            <div class="form-group">
+                                {{ form_label(form.dateResolution) }}
+                                {{ form_widget(form.dateResolution, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.dateResolution) }}
+                            </div>
+                        {% endif %}
 
-                    <div class="form-group">
-                        <label>Créé le</label>
-                        <div class="readonly-field">
-                            {{ ticket.dateCreation ? ticket.dateCreation|date('d/m/Y à H:i') : 'N/A' }}
-                        </div>
+                        {% if form.rapporteur is defined %}
+                            <div class="form-group">
+                                {{ form_label(form.rapporteur) }}
+                                {{ form_widget(form.rapporteur, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.rapporteur) }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-success">
-                    💾 Enregistrer les modifications
-                </button>
                 <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn btn-secondary">
                     ❌ Annuler
                 </a>
+                <button type="submit" class="btn btn-success" id="submitBtn">
+                    💾 Enregistrer les modifications
+                </button>
             </div>
 
-        {{ form_end(form) }}
+            {{ form_end(form) }}
+        </div>
 
     {% endif %}
 </div>
 
 <script>
-// Auto-resize textarea
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-resize textareas
     const textareas = document.querySelectorAll('textarea');
     textareas.forEach(function(textarea) {
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
+        function autoResize() {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+        
+        textarea.addEventListener('input', autoResize);
+        autoResize(); // Initial resize
+    });
+
+    // Form submission loading state
+    const form = document.querySelector('form');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if (form && submitBtn) {
+        form.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Enregistrement...';
         });
-        // Trigger initial resize
-        textarea.dispatchEvent(new Event('input'));
+    }
+
+    // Smooth focus transitions
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.01)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+
+    // Form validation feedback
+    const errorFields = document.querySelectorAll('.form-control');
+    errorFields.forEach(field => {
+        const errorElement = field.parentElement.querySelector('.form-errors, .field-error');
+        if (errorElement) {
+            field.style.borderColor = 'var(--error-color)';
+        }
     });
 });
 </script>

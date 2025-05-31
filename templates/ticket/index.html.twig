@@ -13,9 +13,9 @@
 {% block body %}
 <style>
     .tickets-container {
-        max-width: 1400px;
-        margin: 2rem auto;
-        padding: 2rem;
+        max-width: 1200px;
+        margin: 1rem auto;
+        padding: 1rem;
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -23,9 +23,9 @@
 
     .tickets-header {
         display: flex;
-        justify-content: between;
+        justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -33,7 +33,7 @@
     .tickets-header h1 {
         color: #0d47a1;
         margin: 0;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     .btn-new-ticket {
@@ -44,6 +44,7 @@
         border-radius: 5px;
         font-weight: 500;
         transition: background-color 0.2s;
+        white-space: nowrap;
     }
 
     .btn-new-ticket:hover {
@@ -51,40 +52,80 @@
         color: white;
     }
 
+    /* Table responsive wrapper */
+    .table-responsive {
+        overflow-x: auto;
+        margin-top: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
     .tickets-table {
         width: 100%;
+        min-width: 800px;
         border-collapse: collapse;
-        margin-top: 1rem;
+        background-color: white;
     }
 
     .tickets-table th,
     .tickets-table td {
-        padding: 1rem;
+        padding: 0.75rem;
         text-align: left;
         border-bottom: 1px solid #e0e0e0;
+        vertical-align: top;
     }
 
     .tickets-table th {
-        background-color: #f5f5f5;
+        background-color: #f8f9fa;
         font-weight: 600;
-        color: #424242;
+        color: #495057;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
-    .tickets-table tr:hover {
-        background-color: #f9f9f9;
+    .tickets-table tbody tr:hover {
+        background-color: #f8f9fa;
     }
+
+    /* Column widths */
+    .col-id { width: 80px; }
+    .col-title { width: 200px; min-width: 150px; }
+    .col-type { width: 100px; }
+    .col-status { width: 120px; }
+    .col-priority { width: 100px; }
+    .col-project { width: 150px; }
+    .col-user { width: 130px; }
+    .col-date { width: 120px; }
+    .col-actions { width: 120px; }
 
     .ticket-id {
         font-weight: 600;
         color: #0d47a1;
+        white-space: nowrap;
+    }
+
+    .ticket-title {
+        font-weight: 500;
+        color: #212529;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .ticket-deadline {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
     }
 
     .status-badge {
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
         font-weight: 500;
         text-align: center;
+        white-space: nowrap;
     }
 
     .status-nouveau { background-color: #e3f2fd; color: #0d47a1; }
@@ -96,10 +137,12 @@
     .status-assigne { background-color: #e1f5fe; color: #0277bd; }
 
     .priority-badge {
-        padding: 0.2rem 0.6rem;
-        border-radius: 10px;
-        font-size: 0.75rem;
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        border-radius: 8px;
+        font-size: 0.7rem;
         font-weight: 500;
+        white-space: nowrap;
     }
 
     .priority-basse { background-color: #e8f5e8; color: #2e7d32; }
@@ -107,18 +150,47 @@
     .priority-haute { background-color: #fff3e0; color: #ff6f00; }
     .priority-critique { background-color: #ffebee; color: #c62828; }
 
+    .project-info {
+        line-height: 1.3;
+    }
+
+    .project-name {
+        font-weight: 500;
+        color: #212529;
+    }
+
+    .project-client {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .user-info {
+        font-size: 0.85rem;
+        color: #495057;
+        line-height: 1.3;
+    }
+
+    .date-info {
+        font-size: 0.8rem;
+        color: #6c757d;
+        white-space: nowrap;
+    }
+
     .ticket-actions {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.25rem;
+        flex-wrap: wrap;
     }
 
     .btn-action {
-        padding: 0.4rem 0.8rem;
+        padding: 0.3rem 0.6rem;
         text-decoration: none;
         border-radius: 4px;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 500;
         transition: all 0.2s;
+        white-space: nowrap;
     }
 
     .btn-view {
@@ -134,38 +206,132 @@
     .btn-view:hover, .btn-edit:hover {
         transform: translateY(-1px);
         color: white;
+        opacity: 0.9;
     }
 
     .no-tickets {
         text-align: center;
-        padding: 3rem;
-        color: #666;
+        padding: 3rem 1rem;
+        color: #6c757d;
     }
 
-    .ticket-meta {
-        font-size: 0.9rem;
-        color: #666;
+    .no-tickets h3 {
+        color: #495057;
+        margin-bottom: 1rem;
     }
 
-    .ticket-title-cell {
-        word-wrap: break-word;
-        white-space: normal;
-        max-width: 250px;
+    /* Cards for mobile */
+    .tickets-cards {
+        display: none;
     }
 
-    @media (max-width: 768px) {
+    .ticket-card {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .ticket-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+    }
+
+    .ticket-card-title {
+        font-weight: 500;
+        color: #212529;
+        flex: 1;
+        margin-right: 1rem;
+    }
+
+    .ticket-card-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .ticket-card-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .ticket-card-info-item {
+        font-size: 0.8rem;
+    }
+
+    .ticket-card-info-label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .ticket-card-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+        .tickets-container {
+            margin: 0.5rem;
+            padding: 1rem;
+        }
+        
         .tickets-table {
-            font-size: 0.85rem;
+            min-width: 900px;
         }
         
         .tickets-table th,
         .tickets-table td {
             padding: 0.5rem;
+            font-size: 0.85rem;
         }
-        
+    }
+
+    @media (max-width: 768px) {
         .tickets-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+        
+        .tickets-header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .table-responsive {
+            display: none;
+        }
+        
+        .tickets-cards {
+            display: block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tickets-container {
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .ticket-card-info {
+            grid-template-columns: 1fr;
+        }
+        
+        .ticket-card-actions {
+            justify-content: stretch;
+        }
+        
+        .btn-action {
+            flex: 1;
+            text-align: center;
         }
     }
 </style>
@@ -190,95 +356,182 @@
     </div>
 
     {% if tickets|length > 0 %}
-        <table class="tickets-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Titre</th>
-                    <th>Type</th>
-                    <th>Statut</th>
-                    <th>Priorité</th>
-                    <th>Projet</th>
-                    {% if activeRole != 'ROLE_RAPPORTEUR' %}
-                        <th>Rapporteur</th>
-                    {% endif %}
-                    {% if activeRole != 'ROLE_DEV' %}
-                        <th>Développeur</th>
-                    {% endif %}
-                    <th>Créé le</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ticket in tickets %}
+        <!-- Table pour desktop -->
+        <div class="table-responsive">
+            <table class="tickets-table">
+                <thead>
                     <tr>
-                        <td>
-                            <span class="ticket-id">#{{ ticket.ticketId }}</span>
-                        </td>
-                        <td class="ticket-title-cell">
-                            <strong>{{ ticket.titreTicket }}</strong>
-                            {% if ticket.dateEcheance %}
-                                <div class="ticket-meta">
-                                    📅 Échéance: {{ ticket.dateEcheance|date('d/m/Y') }}
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>{{ ticket.typeTicket ?? 'Non défini' }}</td>
-                        <td>
-                            <span class="status-badge status-{{ ticket.statutTicket|lower|replace({' ': '-'}) }}">
-                                {{ ticket.statutTicket ?? 'Nouveau' }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="priority-badge priority-{{ ticket.prioriteTicket|lower|replace({' ': '-'}) }}">
-                                {{ ticket.prioriteTicket ?? 'Normale' }}
-                            </span>
-                        </td>
-                        <td>
-                            {% if ticket.projet %}
-                                {{ ticket.projet.nomProjet }}
-                                <div class="ticket-meta">{{ ticket.projet.client.nomClient }}</div>
-                            {% else %}
-                                Non défini
-                            {% endif %}
-                        </td>
+                        <th class="col-id">ID</th>
+                        <th class="col-title">Titre</th>
+                        <th class="col-type">Type</th>
+                        <th class="col-status">Statut</th>
+                        <th class="col-priority">Priorité</th>
+                        <th class="col-project">Projet</th>
                         {% if activeRole != 'ROLE_RAPPORTEUR' %}
+                            <th class="col-user">Rapporteur</th>
+                        {% endif %}
+                        {% if activeRole != 'ROLE_DEV' %}
+                            <th class="col-user">Développeur</th>
+                        {% endif %}
+                        <th class="col-date">Créé le</th>
+                        <th class="col-actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
                             <td>
-                                {% if ticket.rapporteur %}
-                                    {{ ticket.rapporteur.prenom }} {{ ticket.rapporteur.nom }}
+                                <span class="ticket-id">#{{ ticket.ticketId }}</span>
+                            </td>
+                            <td>
+                                <div class="ticket-title">{{ ticket.titreTicket }}</div>
+                                {% if ticket.dateEcheance %}
+                                    <div class="ticket-deadline">
+                                        📅 {{ ticket.dateEcheance|date('d/m/Y') }}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.typeTicket ?? 'Non défini' }}</td>
+                            <td>
+                                <span class="status-badge status-{{ ticket.statutTicket|lower|replace({' ': '-'}) }}">
+                                    {{ ticket.statutTicket ?? 'Nouveau' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="priority-badge priority-{{ ticket.prioriteTicket|lower|replace({' ': '-'}) }}">
+                                    {{ ticket.prioriteTicket ?? 'Normale' }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if ticket.projet %}
+                                    <div class="project-info">
+                                        <div class="project-name">{{ ticket.projet.nomProjet }}</div>
+                                        <div class="project-client">{{ ticket.projet.client.nomClient }}</div>
+                                    </div>
                                 {% else %}
                                     Non défini
                                 {% endif %}
                             </td>
-                        {% endif %}
-                        {% if activeRole != 'ROLE_DEV' %}
+                            {% if activeRole != 'ROLE_RAPPORTEUR' %}
+                                <td>
+                                    <div class="user-info">
+                                        {% if ticket.rapporteur %}
+                                            {{ ticket.rapporteur.prenom }} {{ ticket.rapporteur.nom }}
+                                        {% else %}
+                                            Non défini
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endif %}
+                            {% if activeRole != 'ROLE_DEV' %}
+                                <td>
+                                    <div class="user-info">
+                                        {% if ticket.developpeur %}
+                                            {{ ticket.developpeur.prenom }} {{ ticket.developpeur.nom }}
+                                        {% else %}
+                                            <em>Non assigné</em>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endif %}
                             <td>
-                                {% if ticket.developpeur %}
-                                    {{ ticket.developpeur.prenom }} {{ ticket.developpeur.nom }}
-                                {% else %}
-                                    <em>Non assigné</em>
-                                {% endif %}
+                                <div class="date-info">
+                                    {{ ticket.dateCreation ? ticket.dateCreation|date('d/m/Y H:i') : 'N/A' }}
+                                </div>
                             </td>
-                        {% endif %}
-                        <td>{{ ticket.dateCreation ? ticket.dateCreation|date('d/m/Y H:i') : 'N/A' }}</td>
-                        <td>
-                            <div class="ticket-actions">
-                                <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn-action btn-view">
-                                    👁️ Voir
-                                </a>
-                                {% if (activeRole == 'ROLE_RAPPORTEUR' and ticket.rapporteur == app.user) 
-                                   or (activeRole == 'ROLE_DEV' and ticket.developpeur == app.user)
-                                   or activeRole == 'ROLE_ADMIN' %}
-                                    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}" class="btn-action btn-edit">
-                                        ✏️ Modifier
+                            <td>
+                                <div class="ticket-actions">
+                                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn-action btn-view">
+                                        👁️ Voir
                                     </a>
-                                {% endif %}
+                                    {% if (activeRole == 'ROLE_RAPPORTEUR' and ticket.rapporteur == app.user) 
+                                       or (activeRole == 'ROLE_DEV' and ticket.developpeur == app.user)
+                                       or activeRole == 'ROLE_ADMIN' %}
+                                        <a href="{{ path('ticket_edit', {'id': ticket.id}) }}" class="btn-action btn-edit">
+                                            ✏️ Modifier
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cards pour mobile -->
+        <div class="tickets-cards">
+            {% for ticket in tickets %}
+                <div class="ticket-card">
+                    <div class="ticket-card-header">
+                        <div class="ticket-card-title">
+                            <span class="ticket-id">#{{ ticket.ticketId }}</span> - {{ ticket.titreTicket }}
+                        </div>
+                    </div>
+                    
+                    <div class="ticket-card-badges">
+                        <span class="status-badge status-{{ ticket.statutTicket|lower|replace({' ': '-'}) }}">
+                            {{ ticket.statutTicket ?? 'Nouveau' }}
+                        </span>
+                        <span class="priority-badge priority-{{ ticket.prioriteTicket|lower|replace({' ': '-'}) }}">
+                            {{ ticket.prioriteTicket ?? 'Normale' }}
+                        </span>
+                    </div>
+                    
+                    <div class="ticket-card-info">
+                        <div class="ticket-card-info-item">
+                            <div class="ticket-card-info-label">Type</div>
+                            <div>{{ ticket.typeTicket ?? 'Non défini' }}</div>
+                        </div>
+                        <div class="ticket-card-info-item">
+                            <div class="ticket-card-info-label">Créé le</div>
+                            <div>{{ ticket.dateCreation ? ticket.dateCreation|date('d/m/Y') : 'N/A' }}</div>
+                        </div>
+                        {% if ticket.projet %}
+                            <div class="ticket-card-info-item">
+                                <div class="ticket-card-info-label">Projet</div>
+                                <div>{{ ticket.projet.nomProjet }}</div>
                             </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            <div class="ticket-card-info-item">
+                                <div class="ticket-card-info-label">Client</div>
+                                <div>{{ ticket.projet.client.nomClient }}</div>
+                            </div>
+                        {% endif %}
+                        {% if activeRole != 'ROLE_RAPPORTEUR' and ticket.rapporteur %}
+                            <div class="ticket-card-info-item">
+                                <div class="ticket-card-info-label">Rapporteur</div>
+                                <div>{{ ticket.rapporteur.prenom }} {{ ticket.rapporteur.nom }}</div>
+                            </div>
+                        {% endif %}
+                        {% if activeRole != 'ROLE_DEV' and ticket.developpeur %}
+                            <div class="ticket-card-info-item">
+                                <div class="ticket-card-info-label">Développeur</div>
+                                <div>{{ ticket.developpeur.prenom }} {{ ticket.developpeur.nom }}</div>
+                            </div>
+                        {% endif %}
+                        {% if ticket.dateEcheance %}
+                            <div class="ticket-card-info-item">
+                                <div class="ticket-card-info-label">Échéance</div>
+                                <div>📅 {{ ticket.dateEcheance|date('d/m/Y') }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="ticket-card-actions">
+                        <a href="{{ path('ticket_show', {'id': ticket.id}) }}" class="btn-action btn-view">
+                            👁️ Voir
+                        </a>
+                        {% if (activeRole == 'ROLE_RAPPORTEUR' and ticket.rapporteur == app.user) 
+                           or (activeRole == 'ROLE_DEV' and ticket.developpeur == app.user)
+                           or activeRole == 'ROLE_ADMIN' %}
+                            <a href="{{ path('ticket_edit', {'id': ticket.id}) }}" class="btn-action btn-edit">
+                                ✏️ Modifier
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
         <div class="no-tickets">
             <h3>😴 Aucun ticket trouvé</h3>
