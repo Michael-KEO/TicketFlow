@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\MailService;
+use App\Service\MailNotificationService;
 use App\Entity\User;
 use App\Form\UserForm;
 use App\Repository\UserRepository;
