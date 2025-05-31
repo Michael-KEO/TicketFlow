@@ -2,15 +2,6 @@
 
 set -e
 
-echo "=== Clonage du dépôt TicketFlow ==="
-if [ -d "TicketFlow" ]; then
-    echo "Le répertoire TicketFlow existe déjà. Clonage ignoré."
-else
-    git clone https://github.com/Michael-KEO/TicketFlow.git
-fi
-
-cd TicketFlow
-
 echo "=== Configuration des fichiers d'environnement ==="
 [ -f .env ] || cp .env.example .env
 [ -f .env.local ] || cp .env.local.example.docker .env.local
