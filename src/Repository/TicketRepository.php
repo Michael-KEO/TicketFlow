@@ -19,13 +19,11 @@ class TicketRepository extends ServiceEntityRepository
     }
 
     /**
-     * Compte le nombre de tickets pour chaque statut.
-     * @return array Un tableau associatif [statutTicket => count]
+     * Compte les tickets pour chaque statut.
      */
     public function countTicketsByStatus(): array
     {
         $qb = $this->createQueryBuilder('t')
-            // Utiliser la propriété directe 'statutTicket' de l'entité Ticket
             ->select('t.statutTicket, COUNT(t.id) as count')
             ->groupBy('t.statutTicket')
             ->orderBy('t.statutTicket', 'ASC');
@@ -34,7 +32,6 @@ class TicketRepository extends ServiceEntityRepository
 
         $counts = [];
         foreach ($results as $result) {
-            // S'assurer que la clé n'est pas null si statutTicket peut être null
             $statusKey = $result['statutTicket'] ?? 'Non défini';
             $counts[$statusKey] = $result['count'];
         }
@@ -42,13 +39,11 @@ class TicketRepository extends ServiceEntityRepository
     }
 
     /**
-     * Compte le nombre de tickets pour chaque priorité.
-     * @return array Un tableau associatif [prioriteTicket => count]
+     * Compte les tickets pour chaque priorité.
      */
     public function countTicketsByPriority(): array
     {
         $qb = $this->createQueryBuilder('t')
-            // Utiliser la propriété directe 'prioriteTicket'
             ->select('t.prioriteTicket, COUNT(t.id) as count')
             ->groupBy('t.prioriteTicket')
             ->orderBy('t.prioriteTicket', 'ASC');
@@ -57,7 +52,6 @@ class TicketRepository extends ServiceEntityRepository
 
         $counts = [];
         foreach ($results as $result) {
-            // S'assurer que la clé n'est pas null si prioriteTicket peut être null
             $priorityKey = $result['prioriteTicket'] ?? 'Non définie';
             $counts[$priorityKey] = $result['count'];
         }
@@ -65,10 +59,7 @@ class TicketRepository extends ServiceEntityRepository
     }
 
     /**
-     * Compte le nombre de tickets actifs (Nouveau, Ouvert, En cours, Assigné)
-     * assignés à l'utilisateur courant (en utilisant le champ 'developpeur').
-     * @param UserInterface $user
-     * @return int
+     * Tickets actifs assignés à un développeur.
      */
     public function countCurrentUserActiveTickets(UserInterface $user): int
     {
@@ -76,9 +67,7 @@ class TicketRepository extends ServiceEntityRepository
 
         return (int) $this->createQueryBuilder('t')
             ->select('COUNT(t.id)')
-            // Utiliser la propriété 'developpeur' pour l'utilisateur assigné
             ->where('t.developpeur = :user')
-            // Utiliser la propriété directe 'statutTicket'
             ->andWhere('t.statutTicket IN (:statusNames)')
             ->setParameter('user', $user)
             ->setParameter('statusNames', $activeStatusNames)
@@ -86,29 +75,77 @@ class TicketRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * ✅ Compte les tickets par statut pour un développeur.
+     */
+    public function countTicketsByStatusForUser(UserInterface $user, ?string $status = null): int
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.developpeur = :user')
+            ->setParameter('user', $user);
 
-    //    /**
-    //     * @return Ticket[] Returns an array of Ticket objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        if ($status !== null) {
+            $qb->andWhere('t.statutTicket = :status')
+               ->setParameter('status', $status);
+        }
 
-    //    public function findOneBySomeField($value): ?Ticket
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * ✅ Derniers tickets assignés à un développeur.
+     */
+    public function findRecentTicketsForUser(UserInterface $user, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.developpeur = :user')
+            ->setParameter('user', $user)
+            ->orderBy('t.dateCreation', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * ✅ Compte tous les tickets créés par un rapporteur.
+     */
+    public function countTicketsCreatedByUser(UserInterface $user): int
+    {
+        return (int) $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.rapporteur = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * ✅ Compte les tickets créés par un rapporteur pour un statut donné.
+     */
+    public function countTicketsByStatusCreatedByUser(UserInterface $user, string $status): int
+    {
+        return (int) $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.rapporteur = :user')
+            ->andWhere('t.statutTicket = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * ✅ Derniers tickets créés par un rapporteur.
+     */
+    public function findRecentTicketsCreatedByUser(UserInterface $user, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.rapporteur = :user')
+            ->setParameter('user', $user)
+            ->orderBy('t.dateCreation', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
